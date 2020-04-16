@@ -3,8 +3,9 @@ const router = express.Router();
 const db = require("../models");
 
 
-router.get(`/api/users/:id`, function(req,res){
-    console.log("charity get one")
+router.get(`/api/users:id`, function(req,res){
+    console.log("user get one")
+   
     db.Charity.findAll({
         where: {
             id : req.params.id
@@ -14,8 +15,8 @@ router.get(`/api/users/:id`, function(req,res){
     .catch(error => res.json(error))
 });
 
-router.get(`/api/charityList`, function(req,res){
-    console.log("charity get")
+router.get(`/api/users`, function(req,res){
+    console.log("user get")
     db.Charity.findAll({
 
     })
@@ -23,17 +24,18 @@ router.get(`/api/charityList`, function(req,res){
     .catch(error => res.json(error))
 });
 
-router.post(`/api/charityList`, function(req,res){
-    console.log("charity post")
+router.post(`/api/users`, function(req,res){
+    console.log("user post")
     console.log("req.body ", req.body)
-    db.Charity.create({
-        name : req.body.name,
-        streetAddress: req.body.streetAddress,
-        city: req.body.city,
+    db.User.create({
+        email: req.body.email,
+        password: req.body.password,
+        firstName : req.body.name,
+        lastName : req.body.name,
+        phoneNumber : req.body.phoneNumber,
         zipCode: req.body.zipCode,
-        charUrl: req.body.charUrl,
         photo: req.body.photo,
-        email: req.body.email
+        charityID: req.body.charityID
 
     })
     .then((response) => res.status(200).json(response))

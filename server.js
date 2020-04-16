@@ -26,6 +26,9 @@ app.use(require("./controllers/categoryController.js"))
 app.use(require("./controllers/taskController.js"))
 app.use(require("./controllers/htmlController.js"))
 app.use(require("./controllers/authController.js"))
+app.use(require("./controllers/userController"))
+app.use(require("./controllers/userTaskController"))
+app.use(require("./controllers/authController"))
 
 
 // Syncing our database and logging a message to the user upon success

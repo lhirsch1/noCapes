@@ -63,6 +63,9 @@ module.exports = function (sequelize, DataTypes) {
     Charity.hasMany(models.Task, {
       onDelete: "cascade"
     })
+    Charity.hasMany(models.User, {
+      
+    })
   }
 
 

@@ -3,40 +3,19 @@ const bcrypt = require("bcryptjs");
 // Creating our User model
 module.exports = function(sequelize, DataTypes) {
   var UserTask = sequelize.define("UserTask", {
-    // The email cannot be null, and must be a proper email before creation
-    
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+    completionStatus:{
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
-
-    
-    points: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    badge: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-
     
     photo: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-
-
-
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-          isEmail: true
-      }
-    },
-  });
+    confirmed: {
+      type: DataTypes.BOOLEAN
+    }
+  },{timestamps: false});
 
   UserTask.associate = function(models) {
     // We're saying that a Post should belong to an Author

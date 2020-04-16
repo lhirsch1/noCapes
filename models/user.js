@@ -17,8 +17,20 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
-    phone: {
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    phoneNumber: {
       type: DataTypes.STRING
+    },
+    zipCode: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     photo: {
       type: DataTypes.STRING
@@ -27,7 +39,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING
     }
 
-  });
+  },{timestamps: false});
+
+  
+
   // Creating a custom method for our User model. This will check if an unhashed password entered by the user can be compared to the hashed password stored in our database
   User.prototype.validPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
@@ -37,5 +52,11 @@ module.exports = function(sequelize, DataTypes) {
   User.addHook("beforeCreate", function(user) {
     user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
   });
+
+  User.associate = function(models){
+    console.log("user associate")
+    User.belongsTo(models.Charity, {
+    });
+  }
   return User;
 };

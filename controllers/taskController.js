@@ -6,7 +6,7 @@ const db = require("../models");
 router.get(`/api/tasks/`, function(req,res){
     console.log("task get")
     db.Task.findAll({
-        include: [db.Charity] 
+        // include: [db.Charity] 
         
     })
 });

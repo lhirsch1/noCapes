@@ -4,10 +4,24 @@ const bcrypt = require("bcryptjs");
 module.exports = function(sequelize, DataTypes) {
   var Task = sequelize.define("Task", {
     // The email cannot be null, and must be a proper email before creation
+
+    // charityID: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull:false
+    // },
+    // categoryID: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull:false
+    // },
     
     name: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+
+    description:{
+      type: DataTypes.STRING,
+      allowNull: false
     },
 
     
@@ -18,7 +32,12 @@ module.exports = function(sequelize, DataTypes) {
     badge: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    confirmation: {
+      type: DataTypes.BOOLEAN
     }
+  },
+  { timestamps: false 
   });
 
   Task.associate = function(models) {
