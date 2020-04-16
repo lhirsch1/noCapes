@@ -1,39 +1,44 @@
 // Requiring bcrypt for password hashing. Using the bcryptjs version as the regular bcrypt module sometimes causes errors on Windows machines
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 // Creating our User model
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   var Charity = sequelize.define("Charity", {
     // The email cannot be null, and must be a proper email before creation
-    
+
     name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
 
     streetAddress: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     city: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     zipCode: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
 
     charUrl: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isUrl: true
-        }
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isUrl: true
+      }
     },
 
     photo: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
 
 
@@ -43,13 +48,15 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       unique: true,
       validate: {
-          isEmail: true
+        isEmail: true
       }
     },
-  });
+  },
+    { timestamps: false 
+    });
 
-  Charity.associate = function(models){
-    
+  Charity.associate = function (models) {
+
 
     Charity.hasMany(models.Task, {
       onDelete: "cascade"

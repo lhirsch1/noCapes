@@ -6,7 +6,8 @@ const db = require("../models");
 router.get(`/api/tasks/`, function(req,res){
     console.log("task get")
     db.Task.findAll({
-        include: [db.Charity]
+        include: [db.Charity] 
+        
     })
 });
 
@@ -29,12 +30,13 @@ router.get(`/api/tasks/charity/:charId`, function(req,res){
         where: {
             '$Charity.id$' : req.params.charId
         },
-        include: [db.Charity]
+        include: [ db.Category]
     })
 });
 
 router.post(`/api/tasks`, function(req,res){
-    console.log("tasks post")
+    
+    console.log("taskpost ",req.body)
     db.Task.create(req.body)
     .then((response) => res.status(200).json(response))
     .catch(error => res.status(500).json(error))

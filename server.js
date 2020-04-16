@@ -22,6 +22,7 @@ app.use(passport.session());
 
 // Requiring our routes
 app.use(require("./controllers/charityController.js"))
+app.use(require("./controllers/categoryController.js"))
 app.use(require("./controllers/taskController.js"))
 app.use(require("./controllers/htmlController.js"))
 app.use(require("./controllers/authController.js"))

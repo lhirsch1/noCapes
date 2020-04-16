@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../models");
 
 
-router.get(`/api/charityList/:id`, function(req,res){
+router.get(`/api/users/:id`, function(req,res){
     console.log("charity get one")
     db.Charity.findAll({
         where: {

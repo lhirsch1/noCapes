@@ -13,6 +13,8 @@ router.get(`/api/category`, (req, res) => {
 })
 
 router.post(`/api/category`, (req, res) => {
+    console.log("category post")
+    console.log(req.body)
     db.Category.create(req.body)
         .then((response) => res.status(200).json(response))
         .catch(error => res.status(500).json(error))

@@ -7,9 +7,10 @@ module.exports = function(sequelize, DataTypes) {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
+    }
 
-  });
+  },
+  {timestamps: false});
 
   Category.associate = function(models){
     

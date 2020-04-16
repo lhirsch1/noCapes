@@ -7,48 +7,35 @@ module.exports = function(sequelize, DataTypes) {
     
     name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
     },
 
     
     points: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
     },
     badge: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-
-    
-    photo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-          isEmail: true
-      }
-    },
+    }
   });
 
   Task.associate = function(models) {
     // We're saying that a Post should belong to an Author
     // A Post can't be created without an Author due to the foreign key constraint
+    
+    Task.belongsTo(models.Category, {
+      foreignKey: {
+        allowNull: false
+      }
+    })
     Task.belongsTo(models.Charity, {
       foreignKey: {
         allowNull: false
       }
     });
-    Task.belongsTo(models.Category, {
-        foreignKey: {
-          allowNull: false
-        }
-      })
+    
 
       Task.hasMany(models.UserTask, {
           //do not delete user tasks because it will mess up score card
