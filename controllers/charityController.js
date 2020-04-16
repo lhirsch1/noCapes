@@ -14,7 +14,7 @@ router.get('/api/charity/:id', function(req,res){
     .catch(error => res.json(error))
 });
 
-router.get(`/api/charityList`, function(req,res){
+router.get(`/api/charities`, function(req,res){
     console.log("charity get")
     db.Charity.findAll({
 
@@ -23,7 +23,7 @@ router.get(`/api/charityList`, function(req,res){
     .catch(error => res.json(error))
 });
 
-router.post(`/api/charityList`, function(req,res){
+router.post(`/api/charities`, function(req,res){
     console.log("charity post")
     console.log("req.body ", req.body)
     db.Charity.create({

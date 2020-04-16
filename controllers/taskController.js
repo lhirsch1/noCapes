@@ -71,6 +71,22 @@ router.get("/api/task/:id", function(req,res){
     .catch(error => res.json(error))
 })
 
+router.post(`/api/tasks`, function(req,res){
+    console.log("task post")
+    console.log("req.body ", req.body)
+    db.Task.create({
+        CharityId: req.body.CharityId,
+        CategoryId: req.body.CategoryId,
+        name : req.body.name,
+        description: req.body.description,
+        points: req.body.points,
+        badge: req.body.badge,
+        confirmation: req.body.confirmation
+
+    })
+    .then((response) => res.status(200).json(response))
+    .catch(error => res.status(500).json(error))
+});
 
 
 
