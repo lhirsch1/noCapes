@@ -19,7 +19,10 @@ router.post("/api/signup", function(req, res) {
   db.User.create({
     email: req.body.email,
     password: req.body.password,
-    phone: req.body.phone,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    phoneNumber: req.body.phoneNumber,
+    zipCode: req.body.zipCode,
     photo: req.body.photo,
     social: req.body.social
   })

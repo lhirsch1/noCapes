@@ -4,10 +4,23 @@ const db = require("../models");
 
 
 
-router.get(`/api/category`, (req, res) => {
-    db.Category.findAll(
+router.get(`/api/categories/`, (req, res) => {
+    db.Category.findAll({
+        
+    }
 
     )
+        .then(results => res.json(results))
+        .catch(error => res.json(error))
+});
+
+router.get("/api/category/:id", (req, res) => {
+    console.log('one cat')
+    db.Category.findOne({
+        where :{
+            id: req.params.id
+        }
+    })
         .then(results => res.json(results))
         .catch(error => res.json(error))
 })

@@ -3,21 +3,35 @@ const router = express.Router();
 const db = require("../models");
 
 
-router.get(`/api/users:id`, function(req,res){
-    console.log("user get one")
+
+
+
+
+// router.get(`/api/user/:id`, function(req,res){
+//     console.log("user get one")
    
-    db.Charity.findAll({
-        where: {
-            id : req.params.id
-        }
+//     db.User.findAll({
+//         where: {
+//             id : req.params.id
+//         }
+//     })
+//     .then(results => res.json(results))
+//     .catch(error => res.json(error))
+// });
+router.get('/api/user/:id', (req, res) => {
+    console.log('get one user')
+    db.User.findOne({
+      where: {
+        id: req.params.id
+      }
     })
-    .then(results => res.json(results))
-    .catch(error => res.json(error))
-});
+    .then((response) => res.status(200).json(response))
+    .catch(error => res.status(500).json(error))
+  });
 
 router.get(`/api/users`, function(req,res){
-    console.log("user get")
-    db.Charity.findAll({
+    console.log("user get all")
+    db.User.findAll({
 
     })
     .then(results => res.json(results))
@@ -42,13 +56,13 @@ router.post(`/api/users`, function(req,res){
     .catch(error => res.status(500).json(error))
 });
 
-router.put(`/api/charityList`, function(req,res){
-    console.log("charity put")
-    db.Charity.update(
-        //{title :req.body}, {where: req.params.id}
-        //https://medium.com/@sarahdherr/sequelizes-update-method-example-included-39dfed6821d
-    )
-})
+// router.put(`/api/charityList`, function(req,res){
+//     console.log("charity put")
+//     db.Charity.update(
+//         //{title :req.body}, {where: req.params.id}
+//         //https://medium.com/@sarahdherr/sequelizes-update-method-example-included-39dfed6821d
+//     )
+// })
 
 
 

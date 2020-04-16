@@ -74,19 +74,23 @@ USE nocapes_db;
 
 
 
-INSERT INTO Charities (name, streetAddress, city, zipCode, state, phoneNumber, charUrl, photo, email) VALUES ('Minneapolis Food Bank', '123 fake st', 'Minneapolis', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi3@gmail.com'),('st paul Food Bank', '123 fake st', 'st paul', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi4@gmail.com'),('st cloud Food Bank', '123 fake st', 'st cloud', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi5@gmail.com');
+-- INSERT INTO Charities (name, streetAddress, city, zipCode, state, phoneNumber, charUrl, photo, email) VALUES ('Minneapolis Food Bank', '123 fake st', 'Minneapolis', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi32@gmail.com'),('st paul Food Bank', '123 fake st', 'st paul', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi4@gmail.com'),('st cloud Food Bank', '123 fake st', 'st cloud', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi5@gmail.com');
 
 
-INSERT INTO categories (name) VALUES ('donation'),('event'),('promotion');
+-- INSERT INTO categories (name) VALUES ('donation'),('event'),('promotion');
 
 
-INSERT INTO tasks (CharityId,CategoryId, name, description, points,badge, confirmation) VALUES (1,2,'event1','this is an event!',50,'hi there', 1),(2,1,'event2','this is an event2!',50,'hi there',0),(3,1,'event2','this is an event3!',50,'hi there',1);
+-- INSERT INTO tasks (CharityId,CategoryId, name, description, points,badge, confirmation) VALUES (1,2,'event1','this is an event!',50,'hi there', 1),(2,1,'event2','this is an event2!',50,'hi there',0),(3,1,'event2','this is an event3!',50,'hi there',1);
 
--- SELECT tasks.name, charities.name, tasks.points FROM tasks LEFT OUTER JOIN charities on charities.id = tasks.charityID
+-- -- SELECT tasks.name, charities.name, tasks.points FROM tasks LEFT OUTER JOIN charities on charities.id = tasks.charityID
 
- INSERT INTO users (email, password, firstName, lastName, phoneNumber, zipCode, photo, CharityId) VALUES ('abd@gmail.com', 'basjd', 'jimbo', 'jackson', '1231231231', '44444', 'hi!', 1), ('lukerules@aol.biz', 'adfj123', 'luke', 'hirsch', '1231231231', '41523', 'photo!',1),('lukesux@aol.biz', 'adfj123', 'lucas', 'hersch', '1231231231', '51231', 'photo!',1),('steverules@aol.biz', 'adfj123', 'steve', 'jimbo', '1231231231', '12314','photo!',null);
+--  INSERT INTO users (email, password, firstName, lastName, phoneNumber, zipCode, photo, social, CharityId) VALUES ('abdd@gmail.com', 'basjd', 'jimbo', 'jackson', '1231231231', '44444', 'hi!','https://www.instagram.com/himom', 1), ('lukerules@aol.biz', 'adfj123', 'luke', 'hirsch', '1231231231', '41523', 'photo!','https://www.instagram.com/himom',1),('lukesux@aol.biz', 'adfj123', 'lucas', 'hersch', '1231231231', '51231', 'photo!','https://www.instagram.com/himom',1),('steverules@aol.biz', 'adfj123', 'steve', 'jimbo', '1231231231', '12314','photo!','https://www.instagram.com/himom',null);
 
-INSERT INTO userTasks (TaskID, UserID, completionStatus, photo, confirmed) VALUES (1,1,1,'photo!',null),(1,2,1,'photo!',1);
+-- INSERT INTO userTasks (TaskID, UserID, completionStatus, photo, confirmed) VALUES (1,1,1,'photo!',null),(1,2,1,'photo!',1);
 
 -- query for generating scorecard and to do list
 -- select userTasks.id, userTasks.completionStatus, users.first_name, tasks.name, charities.name  from userTasks left outer join tasks on tasks.id = userTasks.taskID left outer join users on users.id = userTasks.userID left outer join charities on tasks.charityID = charities.id;
+
+ select * from tAsks
+
+-- SELECT `id`, `name`, `description`, `points`, `badge`, `confirmation`, `CategoryId`, `CharityId` FROM `Tasks` AS `Task`;
