@@ -27,4 +27,8 @@ router.get("/members", isAuthenticated, function(req, res) {
   res.sendFile(path.join(__dirname, "../public/members.html"));
 });
 
+router.get("/main", function(req,res){
+  res.sendFile(path.join(__dirname, "../public/main.html"))
+})
+
 module.exports = router;
