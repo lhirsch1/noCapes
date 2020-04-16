@@ -31,6 +31,8 @@ router.post(`/api/charityList`, function(req,res){
         streetAddress: req.body.streetAddress,
         city: req.body.city,
         zipCode: req.body.zipCode,
+        state: req.body.state,
+        phoneNumber: req.body.phoneNumber,
         charUrl: req.body.charUrl,
         photo: req.body.photo,
         email: req.body.email

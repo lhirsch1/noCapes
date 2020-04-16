@@ -12,7 +12,7 @@ streetAddress VARCHAR(50),
 city VARCHAR(20),
 zipCode VARCHAR(5),
 state VARCHAR(2),
-phone_number VARCHAR(20),
+phoneNumber VARCHAR(20),
 charUrl VARCHAR(50),
 photo VARCHAR(20),
 email VARCHAR(30),
@@ -82,7 +82,7 @@ FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 -- INSERT INTO Categories VALUES('1','event'),('2','donation'),('3');
 -- select * from Categories;
 
-INSERT INTO Charities (name, streetAddress, city, zipCode, state, phone_number, charUrl, photo, email) VALUES ('Minneapolis Food Bank', '123 fake st', 'Minneapolis', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi3@gmail.com'),('st paul Food Bank', '123 fake st', 'st paul', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi4@gmail.com'),('st cloud Food Bank', '123 fake st', 'st cloud', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi5@gmail.com');
+INSERT INTO Charities (name, streetAddress, city, zipCode, state, phoneNumber, charUrl, photo, email) VALUES ('Minneapolis Food Bank', '123 fake st', 'Minneapolis', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi3@gmail.com'),('st paul Food Bank', '123 fake st', 'st paul', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi4@gmail.com'),('st cloud Food Bank', '123 fake st', 'st cloud', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi5@gmail.com');
 
 
 INSERT INTO categories (name) VALUES ('donation'),('event'),('promotion');
@@ -94,7 +94,7 @@ INSERT INTO tasks (charityID,categoryID, name, description, points,badge) VALUES
 
 INSERT INTO users (email, password, first_name, last_name, phone_number, photo, charityID) VALUES ('lukerules@aol.biz', 'adfj123', 'luke', 'hirsch', '1231231231', 'photo!',null),('lukesux@aol.biz', 'adfj123', 'lucas', 'hersch', '1231231231', 'photo!',null),('steverules@aol.biz', 'adfj123', 'steve', 'jimbo', '1231231231', 'photo!',null);
 
-INSERT INTO userTasks (taskID, userID, completionStatus, photo, confirmed) VALUES (1,1,1,'photo!',null);
+INSERT INTO userTasks (taskID, userID, completionStatus, photo, confirmed) VALUES (1,1,1,'photo!',null),(2,3,1,'photo!',1);
 
 -- query for generating scorecard and to do list
--- select userTasks. completionStatus, users.first_name, tasks.name, charities.name  from userTasks left outer join tasks on tasks.id = userTasks.taskID left outer join users on users.id = userTasks.userID left outer join charities on tasks.charityID = charities.id;
+-- select userTasks.id, userTasks.completionStatus, users.first_name, tasks.name, charities.name  from userTasks left outer join tasks on tasks.id = userTasks.taskID left outer join users on users.id = userTasks.userID left outer join charities on tasks.charityID = charities.id;
