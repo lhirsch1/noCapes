@@ -46,10 +46,19 @@ $(document).ready(function () {
                     var taskDescript = $("<p class='taskDescript'>");
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
-                    addBtn.text("add");
+
+                    //if statement changes button action based on whether it is score or todo
+                    if (listIdentifier===1){
+                    addBtn.text("Mark Done");
                     //addbtn change to complete
                     //addBtn.val([data[i].id, data[i].confirmation])
-                    deleteBtn.text("delete");
+                    deleteBtn.text("Remove");
+                    }
+                    else if (listIdentifier === 2){
+                        
+                    }
+
+                    
                     taskDescript.text(taskData.description);
                     taskTitle.text(taskData.name);
                     console.log

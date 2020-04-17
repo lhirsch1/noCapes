@@ -24,9 +24,9 @@ $(document).ready(function () {
             var taskDescript = $("<p class='taskDescript'>");
             var addBtn = $("<button class='addBtn'>");
             var deleteBtn = $("<button class='deleteBtn'>");
-            addBtn.text("add");
+            addBtn.text("Add To List");
             addBtn.val([data[i].id,data[i].confirmation])
-            deleteBtn.text("delete");
+            deleteBtn.text("Not Interested");
             taskDescript.text(data[i].description);
             taskTitle.text(data[i].name);
             console.log

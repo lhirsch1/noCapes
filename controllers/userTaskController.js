@@ -48,6 +48,15 @@ router.get(`/api/userTask/myList/:id/:comp`, function(req,res){
 });
 
 
+// router.put(`/api/userTasks/:id`, function(req,res){
+//     db.UserTask.update(req.body,
+//         {
+//             where: {
+//                 id: req.body.id
+//             }
+//         })
+// })
+
 router.post(`/api/userTasks`, function(req,res){
     console.log("user task post")
     console.log("req.body ", req.body)
