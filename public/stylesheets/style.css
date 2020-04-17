@@ -2,3 +2,13 @@ form.signup,
 form.login {
   margin-top: 50px;
 }
+
+.taskHolder{
+  margin:5px;
+  background-color: antiquewhite;
+}
+
+.taskCard{
+  margin:5px;
+  background-color: aquamarine;
+}
