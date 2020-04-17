@@ -27,6 +27,26 @@ router.get(`/api/userTask/:id`, function(req,res){
         .catch(error => res.json(error))
 });
 
+//Get Todo list route
+router.get(`/api/userTask/myList/:id`, function(req,res){
+    console.log("userTasks get")
+    db.UserTask.findAll({
+
+        where: {
+            UserId: req.params.id,
+            completionStatus: 1
+        }
+        
+    //     include: [{model: db.User,
+    //     as: 'User',
+    // where:{id:req.params.id}}]
+    }
+
+    )
+        .then(results => res.json(results))
+        .catch(error => res.json(error))
+});
+
 
 router.post(`/api/userTasks`, function(req,res){
     console.log("user task post")

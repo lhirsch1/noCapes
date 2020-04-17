@@ -1,11 +1,16 @@
+var thisUserId = ''
 $(document).ready(function () {
     // This file just does a GET request to figure out which user is logged in
     // and updates the HTML on the page
+    
     $.get("/api/user_data").then(function(data) {
+        thisUserId = data.id
+        console.log('id ', thisUserId);
         $(".member-name").text(data.email);
+        return thisUserId
       });
 
-      
+
     $.get("/api/tasks").then(function (data) {
         console.log(data)
         const taskHolder = $('.taskHolder')
@@ -20,7 +25,7 @@ $(document).ready(function () {
             var addBtn = $("<button class='addBtn'>");
             var deleteBtn = $("<button class='deleteBtn'>");
             addBtn.text("add");
-            addBtn.val([data[i].CharityId,data[i].id])
+            addBtn.val([data[i].id,data[i].confirmation])
             deleteBtn.text("delete");
             taskDescript.text(data[i].description);
             taskTitle.text(data[i].name);
@@ -29,19 +34,27 @@ $(document).ready(function () {
             taskHolder.append(taskCard)
 
         }
-    }).then(function(data){
-        let addBtns = $('.addBtn')
-        //onclick to create userTask 
-        addBtns.click(function(){
-
-            console.log("this ",this.value)
-        })
     }).catch(error => console.log(error))
     
     
 });
 
+$(document).on('click','.addBtn',function(){
+    var confirmBool;
 
+    //just a lil sugar 
+    this.value[2] === 't' ? confirmBool = 1 : confirmBool = 0
+
+
+    //clicking add button creates a userTask and removes from the new task queue
+    $.post('/api/userTasks', {
+        completionStatus: 1,
+        photo: 'hi',
+        confirmed: confirmBool,
+        TaskId: this.value[0],
+        UserId: thisUserId
+    })
+})
 function addTaskToList(){
     console.log(this.value);
 
