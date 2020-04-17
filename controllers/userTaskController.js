@@ -27,14 +27,14 @@ router.get(`/api/userTask/:id`, function(req,res){
         .catch(error => res.json(error))
 });
 
-//Get Todo list route
-router.get(`/api/userTask/myList/:id`, function(req,res){
+//Get mylist/scorecard route
+router.get(`/api/userTask/myList/:id/:comp`, function(req,res){
     console.log("userTasks get")
     db.UserTask.findAll({
 
         where: {
             UserId: req.params.id,
-            completionStatus: 1
+            completionStatus: req.params.comp
         }
         
     //     include: [{model: db.User,

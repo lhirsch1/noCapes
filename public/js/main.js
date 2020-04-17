@@ -11,8 +11,8 @@ $(document).ready(function () {
       });
 
 
-    $.get("/api/tasks").then(function (data) {
-        console.log(data)
+    $.get("/api/tasks/").then(function (data) {
+        console.log("main js task ",data)
         const taskHolder = $('.taskHolder')
 
 

@@ -3,15 +3,19 @@ $(document).ready(function () {
     const pathName = window.location.pathname
     //listIdentifier changes what the userTask api call will look like
     let listIdentifier = ''
+    const content = $(`.content`);
+    
     if(pathName === '/mylist'){
-        console.log("i'm the sherrif in these parts")
-        listIdentifier = 0;
-        console.log('list identifier ',listIdentifier)
+        listIdentifier = 1;
     }
     else if(pathName === '/scorecard'){
-        console.log("scorecard")
-        listIdentifier = 1
-        console.log('list identifier ',listIdentifier)
+        listIdentifier = 2
+        //rendering score
+        const scoreBoard = $(`<div class='scoreboard'>`);
+        const points = $(`<p class='pointHolder'>`)
+        points.text('howdy!')
+        scoreBoard.append(points);
+        content.prepend(scoreBoard)
     }
     // This file just does a GET request to figure out which user is logged in
     // and updates the HTML on the page
@@ -22,7 +26,7 @@ $(document).ready(function () {
         console.log('id ', thisUserId);
         $(".member-name").text(data.email);
         //if there is time change this to one call with a join
-        $.get(`/api/userTask/myList/${thisUserId}`).then(function (data) {
+        $.get(`/api/userTask/myList/${thisUserId}/${listIdentifier}`).then(function (data) {
             console.log(data)
             const taskHolder = $('.taskHolder')
 
@@ -51,6 +55,8 @@ $(document).ready(function () {
                     console.log
                     taskCard.append(taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
                     taskHolder.append(taskCard)
+
+                   
                 })
             }
         }).catch(error => console.log(error))

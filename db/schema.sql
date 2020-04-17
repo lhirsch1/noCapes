@@ -74,13 +74,13 @@ USE nocapes_db;
 
 
 
--- INSERT INTO Charities (name, streetAddress, city, zipCode, state, phoneNumber, charUrl, photo, email) VALUES ('Minneapolis Food Bank', '123 fake st', 'Minneapolis', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi32@gmail.com'),('st paul Food Bank', '123 fake st', 'st paul', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi4@gmail.com'),('st cloud Food Bank', '123 fake st', 'st cloud', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi5@gmail.com');
+INSERT INTO Charities (name, streetAddress, city, zipCode, state, phoneNumber, charUrl, photo, email) VALUES ('Minneapolis Food Bank', '123 fake st', 'Minneapolis', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi32@gmail.com'),('Special Olympics ', '123 fake st', 'st paul', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi4@gmail.com'),('St Paul public library', '123 fake st', 'st cloud', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi5@gmail.com');
 
 
--- INSERT INTO categories (name) VALUES ('donation'),('event'),('promotion');
+INSERT INTO categories (name) VALUES ('donation'),('event'),('promotion');
 
 
--- INSERT INTO tasks (CharityId,CategoryId, name, description, points,badge, confirmation) VALUES (1,2,'event1','this is an event!',50,'hi there', 1),(2,1,'event2','this is an event2!',50,'hi there',0),(3,1,'event2','this is an event3!',50,'hi there',1);
+INSERT INTO tasks (CharityId,CategoryId, name, description, points,badge, confirmation) VALUES (1,1,'Canned Food Drive','Bring 5 canned food items',50,'/can.png', 0),(2,2,'Buddy Walk','Walk around Bde Maka Ska to raise awareness for Down Syndrome!',50,'/walking.png',0),(3,1,'Book Drive','Bring gentley used books for the book drive!',50,'book.jpg',1);
 
 -- -- SELECT tasks.name, charities.name, tasks.points FROM tasks LEFT OUTER JOIN charities on charities.id = tasks.charityID
 
@@ -91,6 +91,6 @@ USE nocapes_db;
 -- query for generating scorecard and to do list
 -- select userTasks.id, userTasks.completionStatus, users.first_name, tasks.name, charities.name  from userTasks left outer join tasks on tasks.id = userTasks.taskID left outer join users on users.id = userTasks.userID left outer join charities on tasks.charityID = charities.id;
 
- select * from tAsks
+ select * from tasks
 
 -- SELECT `id`, `name`, `description`, `points`, `badge`, `confirmation`, `CategoryId`, `CharityId` FROM `Tasks` AS `Task`;
