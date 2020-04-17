@@ -31,9 +31,12 @@ router.get("/main", function(req,res){
   res.sendFile(path.join(__dirname, "../public/main.html"))
 });
 
-router.get("/myTasks", function(req,res){
+router.get("/scorecard", function(req,res){
   res.sendFile(path.join(__dirname, "../public/myTasks.html"))
 });
 
+router.get("/mylist", function(req,res){
+  res.sendFile(path.join(__dirname, "../public/myTasks.html"))
+});
 
 module.exports = router;

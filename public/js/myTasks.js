@@ -1,15 +1,33 @@
 var thisUserId = ''
 $(document).ready(function () {
+    const pathName = window.location.pathname
+    //listIdentifier changes what the userTask api call will look like
+    let listIdentifier = ''
+    if(pathName === '/mylist'){
+        console.log("i'm the sherrif in these parts")
+        listIdentifier = 0;
+        console.log('list identifier ',listIdentifier)
+    }
+    else if(pathName === '/scorecard'){
+        console.log("scorecard")
+        listIdentifier = 1
+        console.log('list identifier ',listIdentifier)
+    }
     // This file just does a GET request to figure out which user is logged in
     // and updates the HTML on the page
+    
 
     $.get("/api/user_data").then(function (data) {
         thisUserId = data.id
         console.log('id ', thisUserId);
         $(".member-name").text(data.email);
+        //if there is time change this to one call with a join
         $.get(`/api/userTask/myList/${thisUserId}`).then(function (data) {
             console.log(data)
             const taskHolder = $('.taskHolder')
+
+
+            //consider having one page for both to do and scorecard
 
 
             for (let i = 0; i < data.length; i++) {
