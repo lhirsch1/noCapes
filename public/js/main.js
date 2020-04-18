@@ -1,46 +1,55 @@
 
-var thisUserId = ''
+
 $(document).ready(function () {
     // This file just does a GET request to figure out which user is logged in
     // and updates the HTML on the page
-    
-    $.get("/api/user_data").then(function(data) {
-        thisUserId = data.id
+
+    $.get("/api/user_data").then(function (data) {
+        var thisUserId = data.id
         console.log('id ', thisUserId);
         $(".member-name").text(data.email);
-        return thisUserId
-      });
+
+        $.get(`/api/newtasks/` + thisUserId).then(function (data) {
+            console.log("main js task ", data)
+            const taskHolder = $('.taskHolder')
+
+            newTasks = data[0];
+
+            newTasks.forEach(
+                ({ id, name, description }) => {
+                    console.log(`${id} task name ${name} desc ${description}`)});
 
 
-    $.get("/api/tasks/").then(function (data) {
-        console.log("main js task ",data)
-        const taskHolder = $('.taskHolder')
+            //renders new tasks for user
+            for (let i = 0; i < data.length; i++) {
+                var taskCard = $("<div class = taskCard>");
+                var taskTitle = $("<p class='taskTitle'>");
+                var taskPhoto = $("<img src='../images/goodjob.jfif'>");
+                var taskDescript = $("<p class='taskDescript'>");
+                var addBtn = $("<button class='addBtn'>");
+                var deleteBtn = $("<button class='deleteBtn'>");
+                addBtn.text("Add To List");
+                addBtn.val([data[i].id, data[i].confirmation])
+                deleteBtn.text("Not Interested");
+                taskDescript.text(data[i].description);
+                taskTitle.text(data[i].name);
+                console.log("data i : ", data[0])
+                taskCard.append(taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
+                taskHolder.append(taskCard)
+
+            }
+        }).catch(error => console.log(error))
+
+    })
 
 
-        //renders new tasks for user
-        for (let i = 0; i < data.length; i++) {
-            var taskCard = $("<div class = taskCard>");
-            var taskTitle = $("<p class='taskTitle'>");
-            var taskPhoto = $("<img src='../images/goodjob.jfif'>");
-            var taskDescript = $("<p class='taskDescript'>");
-            var addBtn = $("<button class='addBtn'>");
-            var deleteBtn = $("<button class='deleteBtn'>");
-            addBtn.text("Add To List");
-            addBtn.val([data[i].id,data[i].confirmation])
-            deleteBtn.text("Not Interested");
-            taskDescript.text(data[i].description);
-            taskTitle.text(data[i].name);
-            console.log
-            taskCard.append(taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
-            taskHolder.append(taskCard)
 
-        }
-    }).catch(error => console.log(error))
-    
-    
+
+
+
 });
 
-$(document).on('click','.addBtn',function(){
+$(document).on('click', '.addBtn', function () {
     var confirmBool;
 
     //just a lil sugar 
@@ -61,7 +70,7 @@ $(document).on('click','.addBtn',function(){
     $(this).siblings().remove()
     $(this).remove()
 })
-function addTaskToList(){
+function addTaskToList() {
     console.log(this.value);
 
 }
