@@ -15,11 +15,10 @@ router.get(`/api/tasks`, function(req,res){
 });
 
 //need to do subquery to find list of tasks that are the users usertasks and exclude them from the rendered new tasks on homepage
-//"SELECT * from tasks where tasks.id NOT IN (SELECT `Task`.`id` FROM `Tasks` AS `Task` LEFT OUTER JOIN `UserTasks` AS `UserTasks` ON `Task`.`id` = `UserTasks`.`TaskId` WHERE `UserTasks`.`UserId` = '1' )"
-//try sequelize.literal 
+//SELECT  * FROM tasks LEFT OUTER JOIN charities ON tasks.CharityId = charities.id WHERE tasks.id NOT IN (SELECT `Task`.`id` FROM `Tasks` AS `Task` LEFT OUTER JOIN `UserTasks` AS `UserTasks` ON `Task`.`id` = `UserTasks`.`TaskId` WHERE `UserTasks`.`UserId` = '1')
 router.get(`/api/newtasks/:id`, function(req,res){
     console.log("new tasks get")
-    db.sequelize.query("SELECT  * FROM tasks LEFT OUTER JOIN charities ON tasks.CharityId = charities.id WHERE tasks.id NOT IN (SELECT `Task`.`id` FROM `Tasks` AS `Task` LEFT OUTER JOIN `UserTasks` AS `UserTasks` ON `Task`.`id` = `UserTasks`.`TaskId` WHERE `UserTasks`.`UserId` = '1')" )
+    db.sequelize.query("SELECT tasks.id AS 'taskid', tasks.name AS 'taskName', tasks.description AS 'taskDescription', tasks.points, tasks.badge, tasks.confirmation, charities.name AS 'charityName', charities.photo, charities.charUrl FROM tasks LEFT OUTER JOIN charities ON tasks.CharityId = charities.id WHERE tasks.id NOT IN (SELECT `Task`.`id` FROM `Tasks` AS `Task` LEFT OUTER JOIN `UserTasks` AS `UserTasks` ON `Task`.`id` = `UserTasks`.`TaskId` WHERE `UserTasks`.`UserId` = '1')" )
         .then(results => res.json(results))
         .catch(error => res.json(error))
 });

@@ -26,49 +26,54 @@ $(document).ready(function () {
         console.log('id ', thisUserId);
         $(".member-name").text(data.email);
         //if there is time change this to one call with a join
-        $.get(`/api/userTask/myList/${thisUserId}/${listIdentifier}`).then(function (data) {
-            console.log(data)
-            const taskHolder = $('.taskHolder')
+        //get usertasks by status and ID. get info from task
+        $.get(`/api/userTask/myList/${thisUserId}/${listIdentifier}`).then(function(data){
+            console.log("new way log" ,data)
+            var myTasks = data[0]
+        })
+        
+        // $.get(`/api/userTask/myList/${thisUserId}/${listIdentifier}`).then(function (data) {
+        //     console.log(data)
+        //     const taskHolder = $('.taskHolder')
 
 
-            //consider having one page for both to do and scorecard
+        //     //consider having one page for both to do and scorecard
 
 
-            for (let i = 0; i < data.length; i++) {
-                console.log('task id ', data[i].TaskId);
-                $.get(`/api/task/${data[i].TaskId}`).then(function (taskData) {
-                    console.log('inside loop userTask data ', data[i]);
-                    console.log('inside loop tast data ', taskData);
+        //     for (let i = 0; i < data.length; i++) {
+        //         console.log('task id ', data[i].TaskId);
+        //         $.get(`/api/task/${data[i].TaskId}`).then(function (taskData) {
+        //             console.log('inside loop userTask data ', data[i]);
+        //             console.log('inside loop tast data ', taskData);
+        //             var taskCard = $("<div class = taskCard>");
+        //             var taskTitle = $("<p class='taskTitle'>");
+        //             var taskPhoto = $("<img src='../images/goodjob.jfif'>");
+        //             var taskDescript = $("<p class='taskDescript'>");
+        //             var addBtn = $("<button class='addBtn'>");
+        //             var deleteBtn = $("<button class='deleteBtn'>");
 
-                    var taskCard = $("<div class = taskCard>");
-                    var taskTitle = $("<p class='taskTitle'>");
-                    var taskPhoto = $("<img src='../images/goodjob.jfif'>");
-                    var taskDescript = $("<p class='taskDescript'>");
-                    var addBtn = $("<button class='addBtn'>");
-                    var deleteBtn = $("<button class='deleteBtn'>");
-
-                    //if statement changes button action based on whether it is score or todo
-                    if (listIdentifier===1){
-                    addBtn.text("Mark Done");
-                    //addbtn change to complete
-                    //addBtn.val([data[i].id, data[i].confirmation])
-                    deleteBtn.text("Remove");
-                    }
-                    else if (listIdentifier === 2){
-                        addBtn.text("View Details")
-                    }
+        //             //if statement changes button action based on whether it is score or todo
+        //             if (listIdentifier===1){
+        //             addBtn.text("Mark Done");
+        //             //addbtn change to complete
+        //             //addBtn.val([data[i].id, data[i].confirmation])
+        //             deleteBtn.text("Remove");
+        //             }
+        //             else if (listIdentifier === 2){
+        //                 addBtn.text("View Details")
+        //             }
 
                     
-                    taskDescript.text(taskData.description);
-                    taskTitle.text(taskData.name);
-                    console.log
-                    taskCard.append(taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
-                    taskHolder.append(taskCard)
+        //             taskDescript.text(taskData.description);
+        //             taskTitle.text(taskData.name);
+        //             console.log
+        //             taskCard.append(taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
+        //             taskHolder.append(taskCard)
 
                    
-                })
-            }
-        }).catch(error => console.log(error))
+        //         })
+        //     }
+        // }).catch(error => console.log(error))
 
     });
 
