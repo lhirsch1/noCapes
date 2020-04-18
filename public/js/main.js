@@ -35,8 +35,6 @@ $(document).ready(function () {
                     console.log("data i : ")
                     taskCard.append(taskCharity, taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
                     taskHolder.append(taskCard)
-                
-                
                 });
 
 
