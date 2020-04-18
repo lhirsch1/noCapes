@@ -55,7 +55,7 @@ $(document).ready(function () {
                     deleteBtn.text("Remove");
                     }
                     else if (listIdentifier === 2){
-                        
+                        addBtn.text("View Details")
                     }
 
                     

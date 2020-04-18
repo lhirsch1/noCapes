@@ -1,3 +1,4 @@
+
 var thisUserId = ''
 $(document).ready(function () {
     // This file just does a GET request to figure out which user is logged in
@@ -53,7 +54,12 @@ $(document).on('click','.addBtn',function(){
         confirmed: confirmBool,
         TaskId: this.value[0],
         UserId: thisUserId
-    })
+    });
+
+    //popper.createPopper($(this),)
+    alert('added to list')
+    $(this).siblings().remove()
+    $(this).remove()
 })
 function addTaskToList(){
     console.log(this.value);
