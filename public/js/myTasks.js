@@ -1,21 +1,4 @@
 
-/*
-Checklist
-
-upload photo
-check exif data for location maybe in userTask
-compare to charity location
-approve if within range
-marks task as done
-
-*/
-
-
-
-
-
-
-
 
 var thisUserId = '';
 let userLat;
