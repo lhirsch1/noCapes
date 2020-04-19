@@ -15,22 +15,13 @@ marks task as done
 
 
 
-var thisUserId = ''
-$(document).ready(function () {
-    function getLocation() {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(showPosition);
-        } else { 
-          console.log('nope')
-        }
-      }
-      
-      function showPosition(position) {
-        console.log("Latitude: " + position.coords.latitude + 
-        "<br>Longitude: " + position.coords.longitude);
-      }
 
-      getLocation()
+
+var thisUserId = '';
+let userLat;
+let userLng;
+$(document).ready(function () {
+
     
     console.log('window ', window.navigator.geolocation)
     const pathName = window.location.pathname
@@ -106,6 +97,14 @@ function markTaskDone(id){
 
 //get charity location coordinates from address
 function getCoords(id){
+    let charLat = '';
+    let charLng = '';
+    
+
+    userLoc = getLocation();
+   
+    
+
     $.get(`/api/charity/${id}`).then(function(data){
         console.log(data)
         var normStAddress = data[0].streetAddress.replace(/\s/g,"+");
@@ -114,8 +113,12 @@ function getCoords(id){
         console.log('normalized address ', normStAddress)
         var address = `${data[0].streetAddress} ${data[0].city} ${data[0].zipCode} ${data[0].state}`;
         console.log(address)
-         $.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${normStAddress},+${normCity},+${data[0].state}&key=AIzaSyC-_L6Oc4Q6H7fQruQLjF2TfW2EL-eB9yo`).then(function(results){
-             console.log(results)
+         $.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${normStAddress},+${normCity},+${data[0].state}&key=AIzaSyC-_L6Oc4Q6H7fQruQLjF2TfW2EL-eB9yo`).then(function(data){
+             charLat = data.results[0].geometry.location.lat
+             charLng = data.results[0].geometry.location.lng
+             console.log("Charitylat = ", charLat)
+             console.log("Charitylon = ", charLng)
+             distance(userLat,userLng,charLat,charLng,"M")
          })
         // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
     })
@@ -165,7 +168,7 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 		dist = dist * 60 * 1.1515;
 		if (unit=="K") { dist = dist * 1.609344 }
 		if (unit=="N") { dist = dist * 0.8684 }
-		console.log(dist);
+		console.log('distance ',dist);
 	}
 }
 
@@ -174,16 +177,21 @@ distance(44.941311999999996,-93.28721920000001,44.963650,-93.278590,"M")
 //function gets current location 
 function getLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
+     navigator.geolocation.getCurrentPosition(showPosition);
     } else { 
       console.log('Please enable location services')
     }
   }
   
   function showPosition(position) {
-    console.log("Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude);
-    distance(position.coords.latitude, position.coords.longitude, charLat, charLong, "M")
+
+    userLat = position.coords.latitude
+    userLng = position.coords.longitude
+    console.log(`user lat ${userLat}`)
+    console.log(`user lng ${userLng}`)
+    // console.log("Latitude: " + position.coords.latitude + 
+    // "<br>Longitude: " + position.coords.longitude);
+    // distance(position.coords.latitude, position.coords.longitude, charLat, charLong, "M")
   }
 
   //getLocation()
