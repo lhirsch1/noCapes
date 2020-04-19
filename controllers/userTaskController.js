@@ -27,27 +27,11 @@ router.get(`/api/userTask/:id`, function (req, res) {
         .catch(error => res.json(error))
 });
 
-//Get mylist/scorecard route
-// router.get(`/api/userTask/myList/:id/:comp`, function (req, res) {
-//     console.log("userTasks get")
-//     db.UserTask.findAll({
-
-//         where: {
-//             UserId: req.params.id,
-//             completionStatus: req.params.comp
-//         }
-//     }
-
-//     )
-//         .then(results => res.json(results))
-//         .catch(error => res.json(error))
-// });
-
 
 router.get(`/api/userTask/myList/:id/:comp`, function (req, res) {
     console.log("userTasks get")
     db.sequelize.query(
-        `SELECT UserTasks.id AS 'UserTaskId', Tasks.name AS 'TaskName', Tasks.description AS 'TaskDescription', Charities.name AS 'CharityName', Tasks.badge AS 'TaskBadge', UserTasks.completionStatus, UserTasks.photo, UserTasks.confirmed, UserTasks.TaskId, UserTasks.UserId FROM UserTasks LEFT OUTER JOIN Tasks  ON UserTasks.TaskId = Tasks.id LEFT OUTER JOIN Charities  ON Tasks.CharityId = Charities.id WHERE UserTasks.UserId = ${req.params.id} AND UserTasks.completionStatus = ${req.params.comp}
+        `SELECT UserTasks.id AS 'UserTaskId', Tasks.name AS 'TaskName', Tasks.description AS 'TaskDescription', Charities.name AS 'CharityName', Charities.id AS 'CharityId', Tasks.badge AS 'TaskBadge', UserTasks.completionStatus, UserTasks.photo, UserTasks.confirmed, UserTasks.TaskId, UserTasks.UserId FROM UserTasks LEFT OUTER JOIN Tasks  ON UserTasks.TaskId = Tasks.id LEFT OUTER JOIN Charities  ON Tasks.CharityId = Charities.id WHERE UserTasks.UserId = ${req.params.id} AND UserTasks.completionStatus = ${req.params.comp}
         `)
         .then(results => res.json(results))
         .catch(error => res.json(error))
@@ -62,19 +46,6 @@ router.get(`/api/userTask/score/:id`, function (req, res) {
         .then(results => res.json(results))
         .catch(error => res.json(error))
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 router.put(`/api/userTasks/:id`, function(req,res){
@@ -98,7 +69,5 @@ router.post(`/api/userTasks`, function (req, res) {
         .then((response) => res.status(200).json(response))
         .catch(error => res.status(500).json(error))
 });
-
-
 
 module.exports = router;

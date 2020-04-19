@@ -48,7 +48,8 @@ router.put(`/api/charityList`, function(req,res){
         //{title :req.body}, {where: req.params.id}
         //https://medium.com/@sarahdherr/sequelizes-update-method-example-included-39dfed6821d
     )
-})
+});
+
 
 
 

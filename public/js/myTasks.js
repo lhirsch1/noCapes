@@ -1,5 +1,3 @@
-const exif = require('exif-js');
-
 
 /*
 Checklist
@@ -70,7 +68,7 @@ $(document).ready(function () {
             var myTasks = data[0]
             //creates a new card for each task
             myTasks.forEach(
-                ({ Taskid, TaskName, TaskDescription, CharityName, confirmation }) => {
+                ({ Taskid, TaskName, TaskDescription, CharityName, CharityId, confirmation }) => {
                     var taskCard = $("<div class = taskCard>");
                     var taskTitle = $("<p class='taskTitle'>");
                     var taskPhoto = $("<img src='../images/goodjob.jfif'>");
@@ -104,6 +102,28 @@ $(document).ready(function () {
 function markTaskDone(id){
     //$.put(`/api/userTask/${id}`)
 }
+
+
+//get charity location coordinates from address
+function getCoords(id){
+    $.get(`/api/charity/${id}`).then(function(data){
+        console.log(data)
+        var normStAddress = data[0].streetAddress.replace(/\s/g,"+");
+        var normCity = data[0].city.replace(/\s/g,"+");
+        console.log('address', data[0].streetAddress)
+        console.log('normalized address ', normStAddress)
+        var address = `${data[0].streetAddress} ${data[0].city} ${data[0].zipCode} ${data[0].state}`;
+        console.log(address)
+         $.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${normStAddress},+${normCity},+${data[0].state}&key=AIzaSyC-_L6Oc4Q6H7fQruQLjF2TfW2EL-eB9yo`).then(function(results){
+             console.log(results)
+         })
+        // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
+    })
+}
+getCoords(1)
+
+
+
 
 $(document).on('click', '.addBtn', function () {
     var confirmBool;
@@ -166,4 +186,4 @@ function getLocation() {
     distance(position.coords.latitude, position.coords.longitude, charLat, charLong, "M")
   }
 
-  getLocation()
+  //getLocation()
