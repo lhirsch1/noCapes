@@ -47,7 +47,17 @@ router.get(`/api/userTask/:id`, function (req, res) {
 router.get(`/api/userTask/myList/:id/:comp`, function (req, res) {
     console.log("userTasks get")
     db.sequelize.query(
-        `SELECT UserTasks.id AS 'UserTaskId', Tasks.name AS 'TaskName', Tasks.description AS 'TaskDescription', Charities.name AS 'CharityName', Tasks.badge AS 'TaskBadge', UserTasks.completionStatus, UserTasks.photo, UserTasks.confirmed, UserTasks.TaskId, UserTasks.UserId FROM UserTasks LEFT OUTER JOIN Tasks  ON UserTasks.TaskId = Tasks.id LEFT OUTER JOIN Charities  ON Tasks.CharityId = Charities.id WHERE UserTasks.UserId = 1 AND UserTasks.completionStatus = 1
+        `SELECT UserTasks.id AS 'UserTaskId', Tasks.name AS 'TaskName', Tasks.description AS 'TaskDescription', Charities.name AS 'CharityName', Tasks.badge AS 'TaskBadge', UserTasks.completionStatus, UserTasks.photo, UserTasks.confirmed, UserTasks.TaskId, UserTasks.UserId FROM UserTasks LEFT OUTER JOIN Tasks  ON UserTasks.TaskId = Tasks.id LEFT OUTER JOIN Charities  ON Tasks.CharityId = Charities.id WHERE UserTasks.UserId = ${req.params.id} AND UserTasks.completionStatus = ${req.params.comp}
+        `)
+        .then(results => res.json(results))
+        .catch(error => res.json(error))
+});
+
+router.get(`/api/userTask/score/:id`, function (req, res) {
+    console.log("userTasks get")
+    db.sequelize.query(
+        ` select SUM(t.points) FROM usertasks as u LEFT OUTER JOIN tasks AS t on u.TaskId =  t.id WHERE u.UserId = ${req.params.id} AND u.completionStatus = 2
+
         `)
         .then(results => res.json(results))
         .catch(error => res.json(error))
@@ -67,15 +77,12 @@ router.get(`/api/userTask/myList/:id/:comp`, function (req, res) {
 
 
 
-
-// router.put(`/api/userTasks/:id`, function(req,res){
-//     db.UserTask.update(req.body,
-//         {
-//             where: {
-//                 id: req.body.id
-//             }
-//         })
-// })
+router.put(`/api/userTasks/:id`, function(req,res){
+    db.sequelize.query(`
+    UPDATE usertasks SET completionStatus = 2 WHERE id = ${req.params.id}
+    `).then((response) => res.status(200).json(response))
+    .catch(error => res.status(500).json(error))
+})
 
 router.post(`/api/userTasks`, function (req, res) {
     console.log("user task post")
