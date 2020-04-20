@@ -11,12 +11,8 @@ $(document).ready(function () {
         $.get(`/api/newtasks/` + thisUserId).then(function (data) {
             const taskHolder = $('.taskHolder')
             newTasks = data[0];
-            console.log(data)
-
             newTasks.forEach(
                 ({ taskid, taskName, taskDescription, taskPoints, photo, charityName, confirmation }) => {
-                   
-               
                     var taskCard = $("<div class='taskCard'>");
                     var taskTitle = $("<h4 class='taskTitle'>");
                     var taskCharity = $("<h3 class='taskCharity'>");
@@ -26,6 +22,8 @@ $(document).ready(function () {
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
                     addBtn.text("Add To List");
+                    addBtn.attr('data-toggle', 'modal');
+                    addBtn.attr('data-target', '#confirmModal');
                     addBtn.val([taskid,confirmation])
                     deleteBtn.text("Not Interested");
                     taskDescript.text(taskDescription);
@@ -56,8 +54,6 @@ $(document).on('click', '.addBtn', function () {
         UserId: thisUserId
     });
 
-    //change to popper.js
-    alert('added to list')
     //remove item from list
     $(this).siblings().remove()
     $(this).parent().remove()

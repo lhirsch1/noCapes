@@ -180,6 +180,7 @@ $(document).on('click', '.addBtn', function () {
                         modalButton.prop('disabled', false)
                     }
                     else {
+                        modalBody.empty()
                         completionDirections.html(`Hmm looks like your heart is in the right place, but you aren't </br> Please mark task complete at the charity location or upload a photo taken there`);
                         modalBody.append(completionDirections)
                     }
