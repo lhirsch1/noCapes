@@ -114,8 +114,8 @@ $(document).ready(function () {
                     //append completed card to container div
                     taskHolder.append(taskCard)
                 });
+            if (listIdentifier === 2){
             const trophyButton = $(`<button class='trophyBtn'>`);
-
             //syncing button to modal
             trophyButton.attr('data-toggle', 'modal');
             trophyButton.attr('data-target', '#trophyCaseModal');
@@ -124,6 +124,7 @@ $(document).ready(function () {
             //append final score to trophy case modal
             const trophyModalBody = $('.trophy-modal-body')
             trophyModalBody.prepend(`Total Points = ${totalPoints}`)
+            }
         }).catch(error => console.log(error));
     });
 });
