@@ -3,13 +3,16 @@
 var thisUserId = '';
 let userLat;
 let userLng;
+let charLat;
+let charLng;
+let listIdentifier = ''
+let userDistance;
 $(document).ready(function () {
 
-    
     console.log('window ', window.navigator.geolocation)
     const pathName = window.location.pathname
     //listIdentifier changes what the userTask api call will look like
-    let listIdentifier = ''
+
     const content = $(`.content`);
 
     if (pathName === '/mylist') {
@@ -32,7 +35,7 @@ $(document).ready(function () {
         thisUserId = data.id
         console.log('id ', thisUserId);
         $(".member-name").text(data.email);
-        
+
 
         //This call gets the tasks to populate either the todo list or the scoreboard
         //
@@ -42,7 +45,7 @@ $(document).ready(function () {
             var myTasks = data[0]
             //creates a new card for each task
             myTasks.forEach(
-                ({ Taskid, TaskName, TaskDescription, CharityName, CharityId, confirmation }) => {
+                ({ TaskId, TaskName, TaskDescription, CompletionMessage, CharityName, CharityId, confirmed }) => {
                     var taskCard = $("<div class = taskCard>");
                     var taskTitle = $("<p class='taskTitle'>");
                     var taskPhoto = $("<img src='../images/goodjob.jfif'>");
@@ -50,17 +53,28 @@ $(document).ready(function () {
                     var taskCharity = $("<p class='taskCharity'>");
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
-                    addBtn.val(Taskid)
+                    console.log("taskid", TaskId)
+                    addBtn.val([TaskId])
 
                     //if statement changes button action based on whether it is score or todo
                     if (listIdentifier === 1) {
                         addBtn.text("Mark Done");
-                        markTaskDone(addBtn.value)
+                        addBtn.attr('data-toggle', 'modal');
+                        addBtn.attr('data-target', '#completeModal');
+                        addBtn.attr('data-completionMessage', CompletionMessage);
+                        addBtn.attr('data-TaskName', TaskName);
+                        addBtn.attr('data-confirm', confirmed);
+                        addBtn.attr('data-charId', CharityId);
+
                         //addbtn change to complete
                         //addBtn.val([data[i].id, data[i].confirmation])
                         deleteBtn.text("Remove");
                     }
                     else if (listIdentifier === 2) {
+
+                        const trophyButton = $(`<button class='trophyBtn'>`);
+                        trophyButton.text('View Trophies');
+                        taskHolder.append(trophyButton)
                         addBtn.text("View Details")
                     }
                     taskDescript.text(TaskDescription);
@@ -73,108 +87,118 @@ $(document).ready(function () {
     });
 });
 
-function markTaskDone(id){
-    //$.put(`/api/userTask/${id}`)
+function markTaskDone(id) {
+    console.log("mark task")
+    //     $.put(`/api/userTask/${id}`)
 }
-
-
-//get charity location coordinates from address
-function getCoords(id){
-    let charLat = '';
-    let charLng = '';
-    
-
-    userLoc = getLocation();
-   
-    
-
-    $.get(`/api/charity/${id}`).then(function(data){
-        console.log(data)
-        var normStAddress = data[0].streetAddress.replace(/\s/g,"+");
-        var normCity = data[0].city.replace(/\s/g,"+");
-        console.log('address', data[0].streetAddress)
-        console.log('normalized address ', normStAddress)
-        var address = `${data[0].streetAddress} ${data[0].city} ${data[0].zipCode} ${data[0].state}`;
-        console.log(address)
-         $.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${normStAddress},+${normCity},+${data[0].state}&key=AIzaSyC-_L6Oc4Q6H7fQruQLjF2TfW2EL-eB9yo`).then(function(data){
-             charLat = data.results[0].geometry.location.lat
-             charLng = data.results[0].geometry.location.lng
-             console.log("Charitylat = ", charLat)
-             console.log("Charitylon = ", charLng)
-             distance(userLat,userLng,charLat,charLng,"M")
-         })
-        // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
-    })
-}
-getCoords(8)
-
 
 
 
 $(document).on('click', '.addBtn', function () {
-    var confirmBool;
+    //if todo
+    const modalBody = $('.modal-body')
+    const completionMessage = $(`<p class='completionMessage'>`);
+    const taskName = $(`<p class='taskName'>`);
+    let completionDirections = $(`<p class='completionDirections'>`)
+    if (listIdentifier === 1) {
+        console.log(this.dataset)
+        console.log(this.dataset.completionmessage)
+        modalBody.empty()
+        
+        taskName.text(this.dataset.taskname);
+        
+        completionMessage.text(this.dataset.completionmessage);
+        modalBody.append(completionMessage)
+        if (this.dataset.confirm === "0") {
+            completionDirections.text('Great job! Press button below to confirm location');
+            modalBody.append(completionDirections)
+            
+        
+            userLoc = getLocation();
+        
+            $.get(`/api/charity/${this.dataset.charid}`).then(function (data) {
+                console.log(data)
+                var normStAddress = data[0].streetAddress.replace(/\s/g, "+");
+                var normCity = data[0].city.replace(/\s/g, "+");
+                console.log('address', data[0].streetAddress)
+                console.log('normalized address ', normStAddress)
+                var address = `${data[0].streetAddress} ${data[0].city} ${data[0].zipCode} ${data[0].state}`;
+                console.log(address)
+                //api call takes address of charity and converts into coordinates
+                $.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${normStAddress},+${normCity},+${data[0].state}&key=AIzaSyC-_L6Oc4Q6H7fQruQLjF2TfW2EL-eB9yo`).then(function (data) {
+                    charLat = data.results[0].geometry.location.lat;
+                    charLng = data.results[0].geometry.location.lng;
+                    console.log("Charitylat = ", charLat);
+                    console.log("Charitylon = ", charLng);
+                    distance(userLat, userLng, charLat, charLng, "M")
+                    
+                }).then(
+                    function(){
+                        if (userDistance < .5){
+                            console.log("you did it")
 
-    //just a lil sugar 
-    this.value[2] === 't' ? confirmBool = 1 : confirmBool = 0
 
+                        }
+                        else{
+                            console.log("nope")
+                        }
+                    }
+                )
+                // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
+            })
 
-    //clicking add button creates a userTask and removes from the new task queue
-    $.post('/api/userTasks', {
-        completionStatus: 1,
-        photo: 'hi',
-        confirmed: confirmBool,
-        TaskId: this.value[0],
-        UserId: thisUserId
-    })
+            console.log("user distance ", userDistance)
+            
+            
+        }
+       
+
+    }
+    //if scorecard
+    else if (listIdentifier === 2) {
+
+    }
 })
-function addTaskToList() {
 
-
-}
 
 
 function distance(lat1, lon1, lat2, lon2, unit) {
-	if ((lat1 == lat2) && (lon1 == lon2)) {
-		return 0;
-	}
-	else {
-		var radlat1 = Math.PI * lat1/180;
-		var radlat2 = Math.PI * lat2/180;
-		var theta = lon1-lon2;
-		var radtheta = Math.PI * theta/180;
-		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-		if (dist > 1) {
-			dist = 1;
-		}
-		dist = Math.acos(dist);
-		dist = dist * 180/Math.PI;
-		dist = dist * 60 * 1.1515;
-		if (unit=="K") { dist = dist * 1.609344 }
-		if (unit=="N") { dist = dist * 0.8684 }
-		console.log('distance ',dist);
-	}
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+        return 0;
+    }
+    else {
+        var radlat1 = Math.PI * lat1 / 180;
+        var radlat2 = Math.PI * lat2 / 180;
+        var theta = lon1 - lon2;
+        var radtheta = Math.PI * theta / 180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515;
+        if (unit == "K") { dist = dist * 1.609344 }
+        if (unit == "N") { dist = dist * 0.8684 }
+        console.log('distance ', dist);
+        userDistance = dist;
+    }
 }
 
-distance(44.941311999999996,-93.28721920000001,44.963650,-93.278590,"M")
+
 
 //function gets current location 
 function getLocation() {
     if (navigator.geolocation) {
-     navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
-      console.log('Please enable location services')
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log('Please enable location services')
     }
-  }
-  
-  function showPosition(position) {
+}
 
+function showPosition(position) {
     userLat = position.coords.latitude
     userLng = position.coords.longitude
-    console.log(`user lat ${userLat}`)
-    console.log(`user lng ${userLng}`)
-    // console.log("Latitude: " + position.coords.latitude + 
-    // "<br>Longitude: " + position.coords.longitude);
-    // distance(position.coords.latitude, position.coords.longitude, charLat, charLong, "M")
-  }
+}
 
-  //getLocation()
+

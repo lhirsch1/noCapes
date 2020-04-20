@@ -14,6 +14,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
 
+    completionMessage:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+
     points: {
         type: DataTypes.INTEGER,
         allowNull: false

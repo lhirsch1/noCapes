@@ -80,7 +80,7 @@ INSERT INTO Charities (name, streetAddress, city, zipCode, state, phoneNumber, c
 INSERT INTO categories (name) VALUES ('donation'),('event'),('promotion');
 
 
-INSERT INTO tasks (CharityId,CategoryId, name, description, points,badge, confirmation) VALUES (1,1,'Canned Food Drive','Bring 5 canned food items',50,'/can.png', 0),(2,2,'Buddy Walk','Walk around Bde Maka Ska to raise awareness for Down Syndrome!',50,'/walking.png',0),(3,1,'Book Drive','Bring gentley used books for the book drive!',50,'book.jpg',1);
+INSERT INTO tasks (CharityId,CategoryId, name, description, completionMessage points,badge, confirmation) VALUES (1,1,'Canned Food Drive','Bring 5 canned food items', 'Thank you for your donation!',50,'/can.png', 0),(2,2,'Buddy Walk','Walk around Bde Maka Ska to raise awareness for Down Syndrome!', 'Thank you for volunteering',50,'/walking.png',0),(3,1,'Book Drive','Bring gentley used books for the book drive!','Thank you for your donation!',50,'book.jpg',1);
 
 -- -- SELECT tasks.name, charities.name, tasks.points FROM tasks LEFT OUTER JOIN charities on charities.id = tasks.charityID
 

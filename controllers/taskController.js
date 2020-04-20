@@ -42,6 +42,7 @@ router.post(`/api/tasks`, function(req,res){
         CategoryId: req.body.CategoryId,
         name : req.body.name,
         description: req.body.description,
+        completionMessage: req.body.completionMessage,
         points: req.body.points,
         badge: req.body.badge,
         confirmation: req.body.confirmation
