@@ -49,12 +49,13 @@ $(document).ready(function () {
             var myTasks = data[0]
             //creates a new card for each task
             myTasks.forEach(
-                ({UserTaskId, TaskId, TaskName, TaskDescription, CompletionMessage, CharityName, CharityPhoto, CharityId, confirmed, TaskBadge }) => {
+                ({UserTaskId, TaskId, TaskName, TaskDescription, CompletionMessage, TaskPoints, CharityName, CharityPhoto, CharityId, confirmed, TaskBadge }) => {
                     var taskCard = $("<div class = taskCard>");
                     var taskTitle = $("<h4 class='taskTitle'>");
                     var taskPhoto = $(`<img src='../images/${CharityPhoto}'>`);
                     var taskDescript = $("<h4 class='taskDescript'>");
                     var taskCharity = $("<h3 class='taskCharity'>");
+                    var taskPoints = $(`<h4 class='taskPoints'>`)
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
                     console.log("taskid", TaskId)
@@ -85,21 +86,26 @@ $(document).ready(function () {
                         trophyButton.attr('data-target', '#trophyCaseModal');
                         trophyButton.text('View Trophies');
                         const trophyContainer = $(`<div class='trophyContainer'>`)
+                        const pointCounter = $(`<p>`)
+                        let totalPoints = 0;
                         for(let i=0; i<badgeArray.length;i++){
                             const trophyInfo = $(`<div class='trophyItem'>`)
-                            trophyInfo.html(`<img src='../images/${TaskBadge}'> </br> <p class='trophyText'>${TaskName}</p>`)
+                            trophyInfo.html(`<img src='../images/${TaskBadge}'> </br> <p class='trophyText'>${TaskName} </br> ${TaskPoints} Points</p>`)
                             console.log('trophy info: ' , trophyInfo)
+                            totalPoints += TaskPoints;
                             trophyContainer.append(trophyInfo);
                         }
+                        pointCounter.text(`Total Points = ${totalPoints}`)
                         const modalBody = $('.modal-body')
-                        modalBody.append(trophyContainer)
+                        modalBody.append(pointCounter,trophyContainer)
                         taskHolder.append(trophyButton)
                         addBtn.text("View Details")
                     }
                     taskDescript.text(TaskDescription);
                     taskTitle.text(TaskName);
-                    taskCharity.text(CharityName)
-                    taskCard.append(taskCharity, taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
+                    taskCharity.text(CharityName);
+                    taskPoints.text(`${TaskPoints} Points`);
+                    taskCard.append(taskCharity, taskTitle, taskPhoto, taskDescript, taskPoints, addBtn, deleteBtn);
                     taskHolder.append(taskCard)
                 });
         })
