@@ -5,92 +5,22 @@
 USE nocapes_db;
 
 
--- CREATE TABLE charities (
--- id INTEGER(11) AUTO_INCREMENT  NOT NULL,
--- name VARCHAR(30),
--- streetAddress VARCHAR(50),
--- city VARCHAR(20),
--- zipCode VARCHAR(5),
--- state VARCHAR(2),
--- phoneNumber VARCHAR(20),
--- charUrl VARCHAR(50),
--- photo VARCHAR(20),
--- email VARCHAR(30),
--- PRIMARY KEY (`id`)
--- );
+INSERT INTO Charities 
+(name, streetAddress, city, zipCode, state, phoneNumber, charUrl, photo, email)
+ VALUES 
+ ('Groveland Food Shelf', '1900 Nicollet Ave', 'Minneapolis', '55408','MN', '1231231231', 'https://www.grovelandfoodshelf.org/','groveland.png','hi32@gmail.com'),
+ ('Special Olympics ', '3000 Bde Maka Ska Parkway', 'Minneapolis', '55408','MN', '1231231231', 'https://specialolympicsminnesota.org/','specialOlympics.png','hi4@gmail.com'),
+ ('Full Cycle', '3515 Chicago Ave', 'Minneapolis', '55407','MN', '1231231231', 'https://fullcyclebikeshop.org/','fullCycle.jpg','hi5@gmail.com'),
+ ('No Capes', '3129 Aldrich Ave S', 'Minneapolis', '55408', 'MN', '1324142311', 'www.google.com', 'nocapes.png', 'nocapes@nocapes.org');
 
 
--- CREATE TABLE categories (
--- id INT NOT NULL AUTO_INCREMENT,
--- name VARCHAR(20),
--- PRIMARY KEY (`id`)
--- );
+INSERT INTO Categories (name) VALUES ('donation'),('event'),('promotion');
 
 
--- CREATE TABLE users (
--- id INT NOT NULL AUTO_INCREMENT,
--- email VARCHAR(50) NOT NULL,
--- password VARCHAR(12) NOT NULL,
--- firstName VARCHAR(30) NOT NULL,
--- lastName VARCHAR(30) NOT NULL,
--- phoneNumber VARCHAR(20),
--- zipCode VARCHAR(5) NOT NULL,
--- photo VARCHAR(20),
--- charityID INT,
--- PRIMARY KEY (`id`),
--- FOREIGN KEY (`charityID`) REFERENCES `charities` (`id`)
--- );
-
--- CREATE TABLE tasks(
--- id INT NOT NULL AUTO_INCREMENT,
--- charityID INT NOT NULL,
--- categoryID INT NOT NULL,
--- name VARCHAR(40) NOT NULL,
--- description VARCHAR(200) NOT NULL,
--- points INT NOT NULL,
--- badge VARCHAR(40),
--- confirmation BOOLEAN,
-
--- PRIMARY KEY (`id`),
--- FOREIGN KEY (`charityID`) REFERENCES `charities` (`id`),
--- FOREIGN KEY (`categoryID`) REFERENCES `categories` (`id`)
-
--- );
-
--- -- completion status determines if task is in todo list, scorecard, or is expired
--- --confirmed is if the charity says you completed the task
--- CREATE TABLE userTasks (
--- id INT NOT NULL AUTO_INCREMENT,
--- taskID INT NOT NULL,
--- userID INT NOT NULL,
--- completionStatus INT,
--- photo VARCHAR(20),
--- confirmed BOOLEAN,
--- PRIMARY KEY (`id`),
--- FOREIGN KEY (`taskID`) REFERENCES `tasks` (`id`),
--- FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
--- );
-
-
-
-
-INSERT INTO Charities (name, streetAddress, city, zipCode, state, phoneNumber, charUrl, photo, email) VALUES ('Minneapolis Food Bank', '123 fake st', 'Minneapolis', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi32@gmail.com'),('Special Olympics ', '123 fake st', 'st paul', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi4@gmail.com'),('St Paul public library', '123 fake st', 'st cloud', '55408','MN', '1231231231', 'http://www.google.com','fadfadf','hi5@gmail.com');
-
-
-INSERT INTO categories (name) VALUES ('donation'),('event'),('promotion');
-
-
-INSERT INTO tasks (CharityId,CategoryId, name, description, completionMessage points,badge, confirmation) VALUES (1,1,'Canned Food Drive','Bring 5 canned food items', 'Thank you for your donation!',50,'/can.png', 0),(2,2,'Buddy Walk','Walk around Bde Maka Ska to raise awareness for Down Syndrome!', 'Thank you for volunteering',50,'/walking.png',0),(3,1,'Book Drive','Bring gentley used books for the book drive!','Thank you for your donation!',50,'book.jpg',1);
-
--- -- SELECT tasks.name, charities.name, tasks.points FROM tasks LEFT OUTER JOIN charities on charities.id = tasks.charityID
-
---  INSERT INTO users (email, password, firstName, lastName, phoneNumber, zipCode, photo, social, CharityId) VALUES ('abdd@gmail.com', 'basjd', 'jimbo', 'jackson', '1231231231', '44444', 'hi!','https://www.instagram.com/himom', 1), ('lukerules@aol.biz', 'adfj123', 'luke', 'hirsch', '1231231231', '41523', 'photo!','https://www.instagram.com/himom',1),('lukesux@aol.biz', 'adfj123', 'lucas', 'hersch', '1231231231', '51231', 'photo!','https://www.instagram.com/himom',1),('steverules@aol.biz', 'adfj123', 'steve', 'jimbo', '1231231231', '12314','photo!','https://www.instagram.com/himom',null);
-
--- INSERT INTO userTasks (TaskID, UserID, completionStatus, photo, confirmed) VALUES (1,1,1,'photo!',null),(1,2,1,'photo!',1);
-
--- query for generating scorecard and to do list
--- select userTasks.id, userTasks.completionStatus, users.first_name, tasks.name, charities.name  from userTasks left outer join tasks on tasks.id = userTasks.taskID left outer join users on users.id = userTasks.userID left outer join charities on tasks.charityID = charities.id;
-
- select * from tasks
-
--- SELECT `id`, `name`, `description`, `points`, `badge`, `confirmation`, `CategoryId`, `CharityId` FROM `Tasks` AS `Task`;
+INSERT INTO Tasks 
+(CharityId,CategoryId,name, description, completionMessage, points,badge, confirmation) 
+VALUES 
+(1,1,'Canned Food Drive','Bring 5 canned food items', 'Thank you for your donation!',50,'/can.png', 0),
+(2,2,'Buddy Walk','Walk around Bde Maka Ska On April 23rd to raise awareness for Down Syndrome!', 'Thank you for volunteering',50,'/walking.png',0),
+(3,1,'Bike Drive','Bring gently used bikes and bike parts for donation!','Thank you for your donation!',50,'bike.png',1),
+(4,1, 'Book Drive', 'Bring gently used books for donation to local shelters','Thank you for your donation!',100,'book.jpg',0);
