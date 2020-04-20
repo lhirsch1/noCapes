@@ -16,13 +16,13 @@ $(document).ready(function () {
             newTasks = data[0];
 
             newTasks.forEach(
-                ({ taskid, taskName, taskDescription, charityName, confirmation }) => {
+                ({ taskid, taskName, taskDescription, photo, charityName, confirmation }) => {
                    
                     
                     var taskCard = $("<div class='taskCard'>");
                     var taskTitle = $("<p class='taskTitle'>");
                     var taskCharity = $("<p class='taskCharity'>");
-                    var taskPhoto = $(`<img src='../images/${CharityPhoto}'>`);
+                    var taskPhoto = $(`<img src='../images/${photo}'>`);
                     var taskDescript = $("<p class='taskDescript'>");
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
