@@ -22,7 +22,7 @@ $(document).ready(function () {
                     var taskCard = $("<div class='taskCard'>");
                     var taskTitle = $("<p class='taskTitle'>");
                     var taskCharity = $("<p class='taskCharity'>");
-                    var taskPhoto = $("<img src='../images/goodjob.jfif'>");
+                    var taskPhoto = $(`<img src='../images/${CharityPhoto}'>`);
                     var taskDescript = $("<p class='taskDescript'>");
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
