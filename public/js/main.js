@@ -29,7 +29,6 @@ $(document).ready(function () {
                     taskDescript.text(taskDescription);
                     taskTitle.text(taskName);
                     taskCharity.text(charityName)
-                    console.log("data i : ")
                     taskCard.append(taskCharity, taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
                     taskHolder.append(taskCard)
                 });

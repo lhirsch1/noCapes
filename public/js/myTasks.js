@@ -18,18 +18,21 @@ $(document).ready(function () {
     //2 is scorecard
 
     const content = $(`.content`);
-
+    const contentHeader = $(`.contentHeader`)
 
     if (pathName === '/mylist') {
         listIdentifier = 1;
         //change page title
         document.title = "ToDo List"
+        contentHeader.text('ToDo List')
+
 
     }
     else if (pathName === '/scorecard') {
         listIdentifier = 2
         //change page title
         document.title = 'Scorecard';
+        contentHeader.text('Scorecard')
         //rendering score
         const scoreBoard = $(`<div class='scoreboard'>`);
         const points = $(`<p class='pointHolder'>`)
