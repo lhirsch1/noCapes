@@ -8,7 +8,9 @@ let charLat;
 let charLng;
 let listIdentifier = ''
 let userDistance;
-let badgeArray = []
+let badgeArray = [];
+let scoreArray = [];
+let titleArray = [];
 $(document).ready(function () {
 
     console.log('window ', window.navigator.geolocation)
@@ -49,7 +51,7 @@ $(document).ready(function () {
             var myTasks = data[0]
             //creates a new card for each task
             myTasks.forEach(
-                ({UserTaskId, TaskId, TaskName, TaskDescription, CompletionMessage, TaskPoints, CharityName, CharityPhoto, CharityId, confirmed, TaskBadge }) => {
+                ({ UserTaskId, TaskId, TaskName, TaskDescription, CompletionMessage, TaskPoints, CharityName, CharityPhoto, CharityId, confirmed, TaskBadge }) => {
                     var taskCard = $("<div class = taskCard>");
                     var taskTitle = $("<h4 class='taskTitle'>");
                     var taskPhoto = $(`<img src='../images/${CharityPhoto}'>`);
@@ -79,25 +81,24 @@ $(document).ready(function () {
                     }
                     else if (listIdentifier === 2) {
                         badgeArray.push(TaskBadge);
+                        scoreArray.push(TaskPoints);
+                        titleArray.push(TaskName);
                         console.log(badgeArray)
                         const trophyButton = $(`<button class='trophyBtn'>`);
-                        
+
                         trophyButton.attr('data-toggle', 'modal');
                         trophyButton.attr('data-target', '#trophyCaseModal');
                         trophyButton.text('View Trophies');
                         const trophyContainer = $(`<div class='trophyContainer'>`)
                         const pointCounter = $(`<p>`)
                         let totalPoints = 0;
-                        for(let i=0; i<badgeArray.length;i++){
-                            const trophyInfo = $(`<div class='trophyItem'>`)
-                            trophyInfo.html(`<img src='../images/${TaskBadge}'> </br> <p class='trophyText'>${TaskName} </br> ${TaskPoints} Points</p>`)
-                            console.log('trophy info: ' , trophyInfo)
-                            totalPoints += TaskPoints;
-                            trophyContainer.append(trophyInfo);
-                        }
+                        const trophyInfo = $(`<div class='trophyItem'>`)
+                        trophyInfo.html(`<img src='../images/${TaskBadge}'> </br> <p class='trophyText'>${TaskName} </br> ${TaskPoints} Points</p>`)
+                        totalPoints += TaskPoints;
+                        trophyContainer.append(trophyInfo);
                         pointCounter.text(`Total Points = ${totalPoints}`)
                         const modalBody = $('.modal-body')
-                        modalBody.append(pointCounter,trophyContainer)
+                        modalBody.append(pointCounter, trophyContainer)
                         taskHolder.append(trophyButton)
                         addBtn.text("View Details")
                     }
@@ -131,26 +132,26 @@ $(document).on('click', '.addBtn', function () {
         console.log(this.dataset)
         console.log(this.dataset.completionmessage)
         modalBody.empty()
-        
+
         taskName.text(this.dataset.taskname);
-        
+
         completionMessage.text(this.dataset.completionmessage);
         modalBody.append(completionMessage)
         //confirmation 0 means location based confirmation
         if (this.dataset.confirm === "0") {
             const modalButton = $('#submitTask');
-           thisTask = this.dataset.usertaskid;
-           console.log("this task", thisTask)
-           
+            thisTask = this.dataset.usertaskid;
+            console.log("this task", thisTask)
+
 
 
             completionDirections.text('Checking location...');
-            
+
 
             modalBody.append(completionDirections)
-            
+
             userLoc = getLocation();
-        
+
             $.get(`/api/charity/${this.dataset.charid}`).then(function (data) {
                 console.log(data)
                 var normStAddress = data[0].streetAddress.replace(/\s/g, "+");
@@ -166,18 +167,18 @@ $(document).on('click', '.addBtn', function () {
                     console.log("Charitylat = ", charLat);
                     console.log("Charitylon = ", charLng);
                     distance(userLat, userLng, charLat, charLng, "M")
-                    
+
                 }).then(
                     //if the distance is within range, the event is considered complete. later there will be other ways to confirm
-                    function(){
-                        if (userDistance < .4){
-                            
+                    function () {
+                        if (userDistance < 1.5) {
+
                             completionDirections.html(`Location confirmed! </br> You earned a new badge!  <img src='../images/${thisBadge}' </br> </br> </br>  Press Save to complete`);
                             modalBody.append(completionDirections)
                             modalButton.prop('disabled', false)
 
                         }
-                        else{
+                        else {
                             console.log("nope")
                             completionDirections.html(`Hmm looks like your heart is in the right place, but you aren't </br> Please mark task complete at the charity location or upload a photo taken there`);
                             modalBody.append(completionDirections)
@@ -188,10 +189,10 @@ $(document).on('click', '.addBtn', function () {
             })
 
             console.log("user distance ", userDistance)
-            
-            
+
+
         }
-       
+
 
     }
     //if scorecard
@@ -239,21 +240,21 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 }
 
 
-$(document).on('click', '#submitTask', function (){
-    console.log(' this is the task! ', thisTask )
-   
+$(document).on('click', '#submitTask', function () {
+    console.log(' this is the task! ', thisTask)
+
     $.ajax({
         url: `/api/userTasks/${thisTask}`,
         type: 'PUT',
-        success: function(response){
+        success: function (response) {
             console.log(response)
         }
     }).then(
-        function(){
+        function () {
             location.reload()
         }
     )
-    
+
 
 })
 
