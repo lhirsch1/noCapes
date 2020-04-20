@@ -40,7 +40,7 @@ router.get(`/api/userTask/myList/:id/:comp`, function (req, res) {
 router.get(`/api/userTask/score/:id`, function (req, res) {
     console.log("userTasks get")
     db.sequelize.query(
-        ` select SUM(t.points) FROM usertasks as u LEFT OUTER JOIN tasks AS t on u.TaskId =  t.id WHERE u.UserId = ${req.params.id} AND u.completionStatus = 2
+        ` select SUM(t.points) FROM UserTasks as u LEFT OUTER JOIN Tasks AS t on u.TaskId =  t.id WHERE u.UserId = ${req.params.id} AND u.completionStatus = 2
 
         `)
         .then(results => res.json(results))
@@ -50,7 +50,7 @@ router.get(`/api/userTask/score/:id`, function (req, res) {
 
 router.put(`/api/userTasks/:id`, function(req,res){
     db.sequelize.query(`
-    UPDATE usertasks SET completionStatus = 2 WHERE id = ${req.params.id}
+    UPDATE UserTasks SET completionStatus = 2 WHERE id = ${req.params.id}
     `).then((response) => res.status(200).json(response))
     .catch(error => res.status(500).json(error))
 })
