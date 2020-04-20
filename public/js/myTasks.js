@@ -26,7 +26,7 @@ $(document).ready(function () {
         //rendering score
         const scoreBoard = $(`<div class='scoreboard'>`);
         const points = $(`<p class='pointHolder'>`)
-        points.text('howdy!')
+        //points.text('howdy!')
         scoreBoard.append(points);
         content.prepend(scoreBoard)
     }
@@ -50,10 +50,10 @@ $(document).ready(function () {
             myTasks.forEach(
                 ({UserTaskId, TaskId, TaskName, TaskDescription, CompletionMessage, CharityName, CharityPhoto, CharityId, confirmed, TaskBadge }) => {
                     var taskCard = $("<div class = taskCard>");
-                    var taskTitle = $("<p class='taskTitle'>");
+                    var taskTitle = $("<h4 class='taskTitle'>");
                     var taskPhoto = $(`<img src='../images/${CharityPhoto}'>`);
-                    var taskDescript = $("<p class='taskDescript'>");
-                    var taskCharity = $("<p class='taskCharity'>");
+                    var taskDescript = $("<h4 class='taskDescript'>");
+                    var taskCharity = $("<h3 class='taskCharity'>");
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
                     console.log("taskid", TaskId)
@@ -157,6 +157,8 @@ $(document).on('click', '.addBtn', function () {
                         }
                         else{
                             console.log("nope")
+                            completionDirections.html(`Hmm looks like your heart is in the right place, but you aren't </br> Please mark task complete at the charity location or upload a photo taken there`);
+                            modalBody.append(completionDirections)
                         }
                     }
                 )
@@ -223,7 +225,11 @@ $(document).on('click', '#submitTask', function (){
         success: function(response){
             console.log(response)
         }
-    })
+    }).then(
+        function(){
+            location.reload()
+        }
+    )
     
 
 })

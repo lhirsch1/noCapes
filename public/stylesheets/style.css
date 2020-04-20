@@ -4,11 +4,19 @@ form.login {
 }
 
 .taskHolder{
-  margin:5px;
+  
   background-color: antiquewhite;
+  color: whitesmoke;
+  background-color: #2D4739;
+  border-radius: 15px;
+
 }
 
 .taskCard{
-  margin:5px;
-  background-color: aquamarine;
+  margin: 15px;
+  padding-top: 10px;
+  background-color:#09814A;
+  border-radius: 15px;
+  text-align: center;
 }
+
