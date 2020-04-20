@@ -8,6 +8,7 @@ let charLat;
 let charLng;
 let listIdentifier = ''
 let userDistance;
+let badgeArray = []
 $(document).ready(function () {
 
     console.log('window ', window.navigator.geolocation)
@@ -68,14 +69,16 @@ $(document).ready(function () {
                         addBtn.attr('data-TaskName', TaskName);
                         addBtn.attr('data-confirm', confirmed);
                         addBtn.attr('data-charId', CharityId);
-                        addBtn.attr('data-userTaskId', UserTaskId)
+                        addBtn.attr('data-userTaskId', UserTaskId);
+                        addBtn.attr('data-taskbadge', TaskBadge);
 
                         //addbtn change to complete
                         //addBtn.val([data[i].id, data[i].confirmation])
                         deleteBtn.text("Remove");
                     }
                     else if (listIdentifier === 2) {
-
+                        badgeArray.push(TaskBadge);
+                        console.log(badgeArray)
                         const trophyButton = $(`<button class='trophyBtn'>`);
                         trophyButton.text('View Trophies');
                         taskHolder.append(trophyButton)
@@ -105,7 +108,8 @@ $(document).on('click', '.addBtn', function () {
     const taskName = $(`<p class='taskName'>`);
     let completionDirections = $(`<p class='completionDirections'>`)
     if (listIdentifier === 1) {
-
+        thisBadge = this.dataset.taskbadge
+        console.log("badge", this.dataset.taskbadge)
         console.log(this.dataset)
         console.log(this.dataset.completionmessage)
         modalBody.empty()
@@ -150,7 +154,7 @@ $(document).on('click', '.addBtn', function () {
                     function(){
                         if (userDistance < .4){
                             
-                            completionDirections.html('Location confirmed! </br> Press Save to complete');
+                            completionDirections.html(`Location confirmed! </br> You earned a new badge!  <img src='../images/${thisBadge}' </br> </br> </br>  Press Save to complete`);
                             modalBody.append(completionDirections)
                             modalButton.prop('disabled', false)
 
@@ -233,6 +237,7 @@ $(document).on('click', '#submitTask', function (){
     
 
 })
+
 
 
 
