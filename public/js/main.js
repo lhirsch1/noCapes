@@ -38,25 +38,6 @@ $(document).ready(function () {
                 });
 
 
-            //renders new tasks for user
-            // for (let i = 0; i < data.length; i++) {
-            //     var taskCard = $("<div class='taskCard'>");
-            //     var taskTitle = $("<p class='taskTitle'>");
-            //     var taskCharity = $("<p class='taskCharity'>");
-            //     var taskPhoto = $("<img src='../images/goodjob.jfif'>");
-            //     var taskDescript = $("<p class='taskDescript'>");
-            //     var addBtn = $("<button class='addBtn'>");
-            //     var deleteBtn = $("<button class='deleteBtn'>");
-            //     addBtn.text("Add To List");
-            //     addBtn.val([data[i].id, data[i].confirmation])
-            //     deleteBtn.text("Not Interested");
-            //     taskDescript.text(data[i].description);
-            //     taskTitle.text(data[i].name);
-            //     console.log("data i : ", data[0])
-            //     taskCard.append(taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
-            //     taskHolder.append(taskCard)
-
-            // }
         }).catch(error => console.log(error))
 
     })

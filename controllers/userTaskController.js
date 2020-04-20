@@ -31,7 +31,7 @@ router.get(`/api/userTask/:id`, function (req, res) {
 router.get(`/api/userTask/myList/:id/:comp`, function (req, res) {
     console.log("userTasks get")
     db.sequelize.query(
-        `SELECT UserTasks.id AS 'UserTaskId', Tasks.name AS 'TaskName', Tasks.description AS 'TaskDescription', Charities.name AS 'CharityName', Tasks.completionMessage AS 'CompletionMessage', Charities.id AS 'CharityId', Tasks.badge AS 'TaskBadge', UserTasks.completionStatus, UserTasks.photo, UserTasks.confirmed, UserTasks.TaskId, UserTasks.UserId FROM UserTasks LEFT OUTER JOIN Tasks  ON UserTasks.TaskId = Tasks.id LEFT OUTER JOIN Charities  ON Tasks.CharityId = Charities.id WHERE UserTasks.UserId = ${req.params.id} AND UserTasks.completionStatus = ${req.params.comp}
+        `SELECT UserTasks.id AS 'UserTaskId', Tasks.name AS 'TaskName', Tasks.description AS 'TaskDescription', Charities.name AS 'CharityName', Tasks.completionMessage AS 'CompletionMessage', Charities.id AS 'CharityId', Charities.photo AS 'CharityPhoto', Tasks.badge AS 'TaskBadge', UserTasks.completionStatus, UserTasks.photo, UserTasks.confirmed, UserTasks.TaskId, UserTasks.UserId FROM UserTasks LEFT OUTER JOIN Tasks  ON UserTasks.TaskId = Tasks.id LEFT OUTER JOIN Charities  ON Tasks.CharityId = Charities.id WHERE UserTasks.UserId = ${req.params.id} AND UserTasks.completionStatus = ${req.params.comp}
         `)
         .then(results => res.json(results))
         .catch(error => res.json(error))

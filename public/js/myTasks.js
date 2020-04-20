@@ -1,6 +1,7 @@
 
 
 var thisUserId = '';
+var thisTask;
 let userLat;
 let userLng;
 let charLat;
@@ -12,6 +13,8 @@ $(document).ready(function () {
     console.log('window ', window.navigator.geolocation)
     const pathName = window.location.pathname
     //listIdentifier changes what the userTask api call will look like
+    //1 means todo list
+    //2 is scorecard
 
     const content = $(`.content`);
 
@@ -45,10 +48,10 @@ $(document).ready(function () {
             var myTasks = data[0]
             //creates a new card for each task
             myTasks.forEach(
-                ({ TaskId, TaskName, TaskDescription, CompletionMessage, CharityName, CharityId, confirmed }) => {
+                ({UserTaskId, TaskId, TaskName, TaskDescription, CompletionMessage, CharityName, CharityPhoto, CharityId, confirmed, TaskBadge }) => {
                     var taskCard = $("<div class = taskCard>");
                     var taskTitle = $("<p class='taskTitle'>");
-                    var taskPhoto = $("<img src='../images/goodjob.jfif'>");
+                    var taskPhoto = $(`<img src='../images/${CharityPhoto}'>`);
                     var taskDescript = $("<p class='taskDescript'>");
                     var taskCharity = $("<p class='taskCharity'>");
                     var addBtn = $("<button class='addBtn'>");
@@ -65,6 +68,7 @@ $(document).ready(function () {
                         addBtn.attr('data-TaskName', TaskName);
                         addBtn.attr('data-confirm', confirmed);
                         addBtn.attr('data-charId', CharityId);
+                        addBtn.attr('data-userTaskId', UserTaskId)
 
                         //addbtn change to complete
                         //addBtn.val([data[i].id, data[i].confirmation])
@@ -101,6 +105,7 @@ $(document).on('click', '.addBtn', function () {
     const taskName = $(`<p class='taskName'>`);
     let completionDirections = $(`<p class='completionDirections'>`)
     if (listIdentifier === 1) {
+
         console.log(this.dataset)
         console.log(this.dataset.completionmessage)
         modalBody.empty()
@@ -109,11 +114,19 @@ $(document).on('click', '.addBtn', function () {
         
         completionMessage.text(this.dataset.completionmessage);
         modalBody.append(completionMessage)
+        //confirmation 0 means location based confirmation
         if (this.dataset.confirm === "0") {
-            completionDirections.text('Great job! Press button below to confirm location');
+            const modalButton = $('#submitTask');
+           thisTask = this.dataset.usertaskid;
+           console.log("this task", thisTask)
+           
+
+
+            completionDirections.text('Checking location...');
+            
+
             modalBody.append(completionDirections)
             
-        
             userLoc = getLocation();
         
             $.get(`/api/charity/${this.dataset.charid}`).then(function (data) {
@@ -133,10 +146,13 @@ $(document).on('click', '.addBtn', function () {
                     distance(userLat, userLng, charLat, charLng, "M")
                     
                 }).then(
+                    //if the distance is within range, the event is considered complete. later there will be other ways to confirm
                     function(){
-                        if (userDistance < .5){
-                            console.log("you did it")
-
+                        if (userDistance < .4){
+                            
+                            completionDirections.html('Location confirmed! </br> Press Save to complete');
+                            modalBody.append(completionDirections)
+                            modalButton.prop('disabled', false)
 
                         }
                         else{
@@ -160,7 +176,19 @@ $(document).on('click', '.addBtn', function () {
     }
 })
 
+//function gets current location 
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log('Please enable location services')
+    }
+}
 
+function showPosition(position) {
+    userLat = position.coords.latitude
+    userLng = position.coords.longitude
+}
 
 function distance(lat1, lon1, lat2, lon2, unit) {
     if ((lat1 == lat2) && (lon1 == lon2)) {
@@ -186,19 +214,19 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 }
 
 
+$(document).on('click', '#submitTask', function (){
+    console.log(' this is the task! ', thisTask )
+   
+    $.ajax({
+        url: `/api/userTasks/${thisTask}`,
+        type: 'PUT',
+        success: function(response){
+            console.log(response)
+        }
+    })
+    
 
-//function gets current location 
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        console.log('Please enable location services')
-    }
-}
+})
 
-function showPosition(position) {
-    userLat = position.coords.latitude
-    userLng = position.coords.longitude
-}
 
 
