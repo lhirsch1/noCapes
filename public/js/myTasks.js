@@ -80,7 +80,19 @@ $(document).ready(function () {
                         badgeArray.push(TaskBadge);
                         console.log(badgeArray)
                         const trophyButton = $(`<button class='trophyBtn'>`);
+                        
+                        trophyButton.attr('data-toggle', 'modal');
+                        trophyButton.attr('data-target', '#trophyCaseModal');
                         trophyButton.text('View Trophies');
+                        const trophyContainer = $(`<div class='trophyContainer'>`)
+                        for(let i=0; i<badgeArray.length;i++){
+                            const trophyInfo = $(`<div class='trophyItem'>`)
+                            trophyInfo.html(`<img src='../images/${TaskBadge}'> </br> <p class='trophyText'>${TaskName}</p>`)
+                            console.log('trophy info: ' , trophyInfo)
+                            trophyContainer.append(trophyInfo);
+                        }
+                        const modalBody = $('.modal-body')
+                        modalBody.append(trophyContainer)
                         taskHolder.append(trophyButton)
                         addBtn.text("View Details")
                     }
@@ -178,6 +190,7 @@ $(document).on('click', '.addBtn', function () {
     }
     //if scorecard
     else if (listIdentifier === 2) {
+
 
     }
 })
