@@ -1,5 +1,3 @@
-
-
 var thisUserId = '';
 var thisTask;
 let userLat;
@@ -11,9 +9,9 @@ let userDistance;
 let badgeArray = [];
 let scoreArray = [];
 let titleArray = [];
+let totalPoints = 0;
 $(document).ready(function () {
 
-    console.log('window ', window.navigator.geolocation)
     const pathName = window.location.pathname
     //listIdentifier changes what the userTask api call will look like
     //1 means todo list
@@ -21,11 +19,17 @@ $(document).ready(function () {
 
     const content = $(`.content`);
 
+
     if (pathName === '/mylist') {
         listIdentifier = 1;
+        //change page title
+        document.title = "ToDo List"
+
     }
     else if (pathName === '/scorecard') {
         listIdentifier = 2
+        //change page title
+        document.title = 'Scorecard';
         //rendering score
         const scoreBoard = $(`<div class='scoreboard'>`);
         const points = $(`<p class='pointHolder'>`)
@@ -39,19 +43,18 @@ $(document).ready(function () {
 
     $.get("/api/user_data").then(function (data) {
         thisUserId = data.id
-        console.log('id ', thisUserId);
         $(".member-name").text(data.email);
 
 
         //This call gets the tasks to populate either the todo list or the scoreboard
-        //
+
         $.get(`/api/userTask/myList/${thisUserId}/${listIdentifier}`).then(function (data) {
-            console.log("new way log", data)
             const taskHolder = $('.taskHolder')
             var myTasks = data[0]
             //creates a new card for each task
             myTasks.forEach(
                 ({ UserTaskId, TaskId, TaskName, TaskDescription, CompletionMessage, TaskPoints, CharityName, CharityPhoto, CharityId, confirmed, TaskBadge }) => {
+                    //creating DOM elements
                     var taskCard = $("<div class = taskCard>");
                     var taskTitle = $("<h4 class='taskTitle'>");
                     var taskPhoto = $(`<img src='../images/${CharityPhoto}'>`);
@@ -60,12 +63,12 @@ $(document).ready(function () {
                     var taskPoints = $(`<h4 class='taskPoints'>`)
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
-                    console.log("taskid", TaskId)
                     addBtn.val([TaskId])
 
                     //if statement changes button action based on whether it is score or todo
                     if (listIdentifier === 1) {
                         addBtn.text("Mark Done");
+                        //adding data attributes to button to store data
                         addBtn.attr('data-toggle', 'modal');
                         addBtn.attr('data-target', '#completeModal');
                         addBtn.attr('data-completionMessage', CompletionMessage);
@@ -80,129 +83,109 @@ $(document).ready(function () {
                         deleteBtn.text("Remove");
                     }
                     else if (listIdentifier === 2) {
+                        //populating arrays for trophy case
                         badgeArray.push(TaskBadge);
                         scoreArray.push(TaskPoints);
                         titleArray.push(TaskName);
-                        console.log(badgeArray)
-                        const trophyButton = $(`<button class='trophyBtn'>`);
 
-                        trophyButton.attr('data-toggle', 'modal');
-                        trophyButton.attr('data-target', '#trophyCaseModal');
-                        trophyButton.text('View Trophies');
+                        //building trophy case dom
                         const trophyContainer = $(`<div class='trophyContainer'>`)
                         const pointCounter = $(`<p>`)
-                        let totalPoints = 0;
                         const trophyInfo = $(`<div class='trophyItem'>`)
                         trophyInfo.html(`<img src='../images/${TaskBadge}'> </br> <p class='trophyText'>${TaskName} </br> ${TaskPoints} Points</p>`)
+                        //adding points
                         totalPoints += TaskPoints;
                         trophyContainer.append(trophyInfo);
-                        pointCounter.text(`Total Points = ${totalPoints}`)
-                        const modalBody = $('.modal-body')
-                        modalBody.append(pointCounter, trophyContainer)
-                        taskHolder.append(trophyButton)
-                        addBtn.text("View Details")
+
+                        const trophyModalBody = $('.trophy-modal-body')
+                        trophyModalBody.append(pointCounter, trophyContainer)
+
+                        addBtn.attr('display', 'none')
                     }
+                    //populating cards with data
                     taskDescript.text(TaskDescription);
                     taskTitle.text(TaskName);
                     taskCharity.text(CharityName);
                     taskPoints.text(`${TaskPoints} Points`);
-                    taskCard.append(taskCharity, taskTitle, taskPhoto, taskDescript, taskPoints, addBtn, deleteBtn);
+                    taskCard.append(taskCharity, taskTitle, taskPhoto, taskDescript, taskPoints)
+                    if (listIdentifier === 1) {
+                        taskCard.append(addBtn, deleteBtn);
+                    }
+                    //append completed card to container div
                     taskHolder.append(taskCard)
                 });
-        })
+            const trophyButton = $(`<button class='trophyBtn'>`);
+
+            //syncing button to modal
+            trophyButton.attr('data-toggle', 'modal');
+            trophyButton.attr('data-target', '#trophyCaseModal');
+            trophyButton.text('View Trophies');
+            taskHolder.prepend(trophyButton)
+            //append final score to trophy case modal
+            const trophyModalBody = $('.trophy-modal-body')
+            trophyModalBody.prepend(`Total Points = ${totalPoints}`)
+        }).catch(error => console.log(error));
     });
 });
 
-function markTaskDone(id) {
-    console.log("mark task")
-    //     $.put(`/api/userTask/${id}`)
-}
-
-
-
+//todo add button listener
 $(document).on('click', '.addBtn', function () {
-    //if todo
+    //dom manipulation for modal
     const modalBody = $('.modal-body')
     const completionMessage = $(`<p class='completionMessage'>`);
     const taskName = $(`<p class='taskName'>`);
     let completionDirections = $(`<p class='completionDirections'>`)
-    if (listIdentifier === 1) {
-        thisBadge = this.dataset.taskbadge
-        console.log("badge", this.dataset.taskbadge)
-        console.log(this.dataset)
-        console.log(this.dataset.completionmessage)
-        modalBody.empty()
 
-        taskName.text(this.dataset.taskname);
+    //clear modal content
+    modalBody.empty()
 
-        completionMessage.text(this.dataset.completionmessage);
-        modalBody.append(completionMessage)
-        //confirmation 0 means location based confirmation
-        if (this.dataset.confirm === "0") {
-            const modalButton = $('#submitTask');
-            thisTask = this.dataset.usertaskid;
-            console.log("this task", thisTask)
+    //retrieving data from addBtn data attributes
+    thisBadge = this.dataset.taskbadge
+    taskName.text(this.dataset.taskname);
+    completionMessage.text(this.dataset.completionmessage);
+    modalBody.append(completionMessage)
+    //confirmation 0 means location based confirmation
+    if (this.dataset.confirm === "0") {
+        const modalButton = $('#submitTask');
+        thisTask = this.dataset.usertaskid;
+        completionDirections.text('Checking location...');
+        modalBody.append(completionDirections)
+        //calls function to get user coords
+        userLoc = getLocation();
+        //api call to get charity address information
+        $.get(`/api/charity/${this.dataset.charid}`).then(function (data) {
+            //formating address strings
+            var normStAddress = data[0].streetAddress.replace(/\s/g, "+");
+            var normCity = data[0].city.replace(/\s/g, "+");
+            var address = `${data[0].streetAddress} ${data[0].city} ${data[0].zipCode} ${data[0].state}`;
+            //api call takes address of charity and converts into coordinates
+            $.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${normStAddress},+${normCity},+${data[0].state}&key=AIzaSyC-_L6Oc4Q6H7fQruQLjF2TfW2EL-eB9yo`).then(function (data) {
+                charLat = data.results[0].geometry.location.lat;
+                charLng = data.results[0].geometry.location.lng;
+                //calls distance function to get the distance between user and charity in miles
+                distance(userLat, userLng, charLat, charLng, "M")
 
-
-
-            completionDirections.text('Checking location...');
-
-
-            modalBody.append(completionDirections)
-
-            userLoc = getLocation();
-
-            $.get(`/api/charity/${this.dataset.charid}`).then(function (data) {
-                console.log(data)
-                var normStAddress = data[0].streetAddress.replace(/\s/g, "+");
-                var normCity = data[0].city.replace(/\s/g, "+");
-                console.log('address', data[0].streetAddress)
-                console.log('normalized address ', normStAddress)
-                var address = `${data[0].streetAddress} ${data[0].city} ${data[0].zipCode} ${data[0].state}`;
-                console.log(address)
-                //api call takes address of charity and converts into coordinates
-                $.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${normStAddress},+${normCity},+${data[0].state}&key=AIzaSyC-_L6Oc4Q6H7fQruQLjF2TfW2EL-eB9yo`).then(function (data) {
-                    charLat = data.results[0].geometry.location.lat;
-                    charLng = data.results[0].geometry.location.lng;
-                    console.log("Charitylat = ", charLat);
-                    console.log("Charitylon = ", charLng);
-                    distance(userLat, userLng, charLat, charLng, "M")
-
-                }).then(
-                    //if the distance is within range, the event is considered complete. later there will be other ways to confirm
-                    function () {
-                        if (userDistance < 1.5) {
-
-                            completionDirections.html(`Location confirmed! </br> You earned a new badge!  <img src='../images/${thisBadge}' </br> </br> </br>  Press Save to complete`);
-                            modalBody.append(completionDirections)
-                            modalButton.prop('disabled', false)
-
-                        }
-                        else {
-                            console.log("nope")
-                            completionDirections.html(`Hmm looks like your heart is in the right place, but you aren't </br> Please mark task complete at the charity location or upload a photo taken there`);
-                            modalBody.append(completionDirections)
-                        }
+            }).then(
+                //if the distance is within range, the event is considered complete. later there will be other ways to confirm
+                function () {
+                    //distance is much higher for testing purposes
+                    //if within set distance, task is approved
+                    if (userDistance < 1.5) {
+                        completionDirections.html(`Location confirmed! </br> You earned a new badge!  <img src='../images/${thisBadge}' </br> </br> </br>  Press Save to complete`);
+                        modalBody.append(completionDirections)
+                        modalButton.prop('disabled', false)
                     }
-                )
-                // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
-            })
-
-            console.log("user distance ", userDistance)
-
-
-        }
-
-
-    }
-    //if scorecard
-    else if (listIdentifier === 2) {
-
-
+                    else {
+                        completionDirections.html(`Hmm looks like your heart is in the right place, but you aren't </br> Please mark task complete at the charity location or upload a photo taken there`);
+                        modalBody.append(completionDirections)
+                    }
+                }
+            ).catch(error => console.log(error));
+        }).catch(error => console.log(error));
     }
 })
 
-//function gets current location 
+//function checks if location is enabled and calls other function 
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -210,12 +193,13 @@ function getLocation() {
         console.log('Please enable location services')
     }
 }
-
+//gets user coordinates
 function showPosition(position) {
     userLat = position.coords.latitude
     userLng = position.coords.longitude
 }
 
+//function measures distance between two points 
 function distance(lat1, lon1, lat2, lon2, unit) {
     if ((lat1 == lat2) && (lon1 == lon2)) {
         return 0;
@@ -234,28 +218,23 @@ function distance(lat1, lon1, lat2, lon2, unit) {
         dist = dist * 60 * 1.1515;
         if (unit == "K") { dist = dist * 1.609344 }
         if (unit == "N") { dist = dist * 0.8684 }
-        console.log('distance ', dist);
         userDistance = dist;
     }
 }
 
-
+//listener for submit task button
+//updates usertask from todo item to complete
 $(document).on('click', '#submitTask', function () {
-    console.log(' this is the task! ', thisTask)
-
     $.ajax({
         url: `/api/userTasks/${thisTask}`,
         type: 'PUT',
         success: function (response) {
-            console.log(response)
         }
     }).then(
         function () {
             location.reload()
         }
     )
-
-
 })
 
 

@@ -3,16 +3,13 @@ var thisUserId;
 $(document).ready(function () {
     // This file just does a GET request to figure out which user is logged in
     // and updates the HTML on the page
-
     $.get("/api/user_data").then(function (data) {
         thisUserId = data.id
-        console.log('id ', thisUserId);
         $(".member-name").text(data.email);
 
+        //api call gets tasks that the user has not interacted with
         $.get(`/api/newtasks/` + thisUserId).then(function (data) {
-            console.log("main js task ", data)
             const taskHolder = $('.taskHolder')
-
             newTasks = data[0];
 
             newTasks.forEach(
@@ -39,19 +36,11 @@ $(document).ready(function () {
 
 
         }).catch(error => console.log(error))
-
     })
-
-
-
-
-
-
 });
 
 $(document).on('click', '.addBtn', function () {
     var confirmBool;
-
     //just a lil sugar 
     this.value[2] === 't' ? confirmBool = 1 : confirmBool = 0
 
@@ -65,12 +54,20 @@ $(document).on('click', '.addBtn', function () {
         UserId: thisUserId
     });
 
-    //popper.createPopper($(this),)
+    //change to popper.js
     alert('added to list')
+    //remove item from list
     $(this).siblings().remove()
+    $(this).parent().remove()
     $(this).remove()
 })
-function addTaskToList() {
-    console.log(this.value);
 
-}
+
+$(document).on('click', '.deleteBtn', function () {
+    //change to popper.js
+    alert('removed to list')
+    //remove item from list
+    $(this).siblings().remove()
+    $(this).parent().remove()
+    $(this).remove()
+})
