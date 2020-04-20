@@ -18,7 +18,7 @@ router.get(`/api/tasks`, function(req,res){
 //SELECT  * FROM tasks LEFT OUTER JOIN charities ON tasks.CharityId = charities.id WHERE tasks.id NOT IN (SELECT `Task`.`id` FROM `Tasks` AS `Task` LEFT OUTER JOIN `UserTasks` AS `UserTasks` ON `Task`.`id` = `UserTasks`.`TaskId` WHERE `UserTasks`.`UserId` = '1')
 router.get(`/api/newtasks/:id`, function(req,res){
     console.log("new tasks get")
-    db.sequelize.query("SELECT Tasks.id AS 'taskid', Tasks.name AS 'taskName', Tasks.description AS 'taskDescription', Tasks.points, Tasks.badge, Tasks.confirmation, Charities.name AS 'charityName', Charities.photo, Charities.charUrl FROM Tasks LEFT OUTER JOIN Charities ON Tasks.CharityId = Charities.id WHERE Tasks.id NOT IN (SELECT `Task`.`id` FROM `Tasks` AS `Task` LEFT OUTER JOIN `UserTasks` AS `UserTasks` ON `Task`.`id` = `UserTasks`.`TaskId` WHERE `UserTasks`.`UserId` = "+ req.params.id+")" )
+    db.sequelize.query("SELECT Tasks.id AS 'taskid', Tasks.name AS 'taskName', Tasks.description AS 'taskDescription', Tasks.points AS 'taskPoints', Tasks.badge, Tasks.confirmation, Charities.name AS 'charityName', Charities.photo, Charities.charUrl FROM Tasks LEFT OUTER JOIN Charities ON Tasks.CharityId = Charities.id WHERE Tasks.id NOT IN (SELECT `Task`.`id` FROM `Tasks` AS `Task` LEFT OUTER JOIN `UserTasks` AS `UserTasks` ON `Task`.`id` = `UserTasks`.`TaskId` WHERE `UserTasks`.`UserId` = "+ req.params.id+")" )
         .then(results => res.json(results))
         .catch(error => res.json(error))
 });

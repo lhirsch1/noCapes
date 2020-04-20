@@ -11,16 +11,18 @@ $(document).ready(function () {
         $.get(`/api/newtasks/` + thisUserId).then(function (data) {
             const taskHolder = $('.taskHolder')
             newTasks = data[0];
+            console.log(data)
 
             newTasks.forEach(
-                ({ taskid, taskName, taskDescription, photo, charityName, confirmation }) => {
+                ({ taskid, taskName, taskDescription, taskPoints, photo, charityName, confirmation }) => {
                    
-                    
+               
                     var taskCard = $("<div class='taskCard'>");
-                    var taskTitle = $("<p class='taskTitle'>");
-                    var taskCharity = $("<p class='taskCharity'>");
+                    var taskTitle = $("<h4 class='taskTitle'>");
+                    var taskCharity = $("<h3 class='taskCharity'>");
                     var taskPhoto = $(`<img src='../images/${photo}'>`);
-                    var taskDescript = $("<p class='taskDescript'>");
+                    var taskDescript = $("<h4 class='taskDescript'>");
+                    var taskPoint = $(`<h4 class='taskPoints'>`)
                     var addBtn = $("<button class='addBtn'>");
                     var deleteBtn = $("<button class='deleteBtn'>");
                     addBtn.text("Add To List");
@@ -29,7 +31,8 @@ $(document).ready(function () {
                     taskDescript.text(taskDescription);
                     taskTitle.text(taskName);
                     taskCharity.text(charityName)
-                    taskCard.append(taskCharity, taskTitle, taskPhoto, taskDescript, addBtn, deleteBtn);
+                    taskPoint.text(`${taskPoints} Points`)
+                    taskCard.append(taskCharity, taskTitle, taskPhoto, taskDescript, taskPoint, addBtn, deleteBtn);
                     taskHolder.append(taskCard)
                 });
 
